@@ -16,12 +16,13 @@ public interface SecureFileContainer<E> {
 	 */
 	
 	// Crea l’identità di un nuovo utente della collezione
-	public void createUser(String Id, String passw) throws NullPointerException, UserAlreadyRegisteredException, WeakPasswordException;
+	public void createUser(String Id, String passw) throws NullPointerException, UserAlreadyRegisteredException, WeakPasswordException, IllegalUsernameException;
 	/*
 	 * REQUIRES: Id!=null && passw!=null
 	 * THROWS: Se Id==null || passw==null -> NullPointerException (eccezione disponibile in Java, unchecked)
 	 * 		   Se Id esiste già nella collezione -> UserAlreadyRegisteredException (eccezione non disponibile in Java, checked)
 	 * 		   Se passw.length < 5 -> WeakPasswordException (eccezione non disponibile in Java, checked)
+	 * 		   Se Id.length < 2 -> IllegalUsernameException (eccezione non disponibili in Java, checked)
 	 * MODIFIES: this
 	 * EFFECTS: Viene creato ed inserito nella collezione, l'elemento <Id, passw, <>>
 	 */
@@ -179,6 +180,18 @@ public interface SecureFileContainer<E> {
         }
         
         public NoDataException(String s) {
+            super(s);
+        }
+    }
+	
+	@SuppressWarnings("serial")
+	class IllegalUsernameException extends Exception {
+
+		public IllegalUsernameException() {
+            super();
+        }
+        
+        public IllegalUsernameException(String s) {
             super(s);
         }
     }
