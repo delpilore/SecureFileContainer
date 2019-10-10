@@ -24,7 +24,7 @@ public class MainClass {
 			a = dropbox.getSize("cicchio", "12345");
 			System.out.println("[Size File Storage] cicchio ha " + a + " file salvati");
 			
-			dropbox.put("cicchio", "12345", "file2");
+			dropbox.put("cicchio", "12345", "file1");
 			a = dropbox.getSize("cicchio", "12345");
 			System.out.println("[Size File Storage] cicchio ha " + a + " file salvati");
 			
@@ -35,6 +35,11 @@ public class MainClass {
 			
 			receive = dropbox.remove("cicchio", "12345", "file1");
 			System.out.println("[Remove] cicchio ha eliminato " + receive + " dal suo file storage");
+			a = dropbox.getSize("cicchio", "12345");
+			System.out.println("[Size File Storage] cicchio ha " + a + " file salvati");
+			
+			dropbox.copy("cicchio", "12345", "file1");
+			System.out.println("[Copy] cicchio ha effettuato una copia");
 			a = dropbox.getSize("cicchio", "12345");
 			System.out.println("[Size File Storage] cicchio ha " + a + " file salvati");
 			
