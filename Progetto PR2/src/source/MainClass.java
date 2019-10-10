@@ -1,5 +1,7 @@
 package source;
 
+import java.util.Iterator;
+
 import source.SecureFileContainer.IllegalUsernameException;
 import source.SecureFileContainer.NoDataException;
 import source.SecureFileContainer.UserAlreadyRegisteredException;
@@ -12,39 +14,71 @@ public class MainClass {
 	public static void main(String[] args){
 		
 		SecureFileContainer<String> dropbox = new SecureFileContainer_Impl1<String>();
+		int a;
+		String receive;
 	
-		try {
-			dropbox.createUser("cicchio", "12345");
+		try { //test createUser, getSize, put, get, remove, copy, getIterator (senza arrivo di eccezioni)
+			System.out.println("---AVVIO FILE STORAGE DROPBOX---");
+			
+			dropbox.createUser("pippo", "12345");
+			System.out.println("[USER REGISTERED] L'utente: <pippo> si è registrato!");
 			dropbox.createUser("giovanni", "12345");
+			System.out.println("[USER REGISTERED] L'utente: <giovanni> si è registrato!");
 			
-			int a = dropbox.getSize("cicchio", "12345");
-			System.out.println("[Size File Storage] cicchio ha " + a + " file salvati");
+			dropbox.put("pippo", "12345", "file1");
+			System.out.println("[File Uploaded] L'utente: <pippo> ha caricato il file: <file1>");
+			a = dropbox.getSize("pippo", "12345");
+			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
 			
-			dropbox.put("cicchio", "12345", "file1");
-			a = dropbox.getSize("cicchio", "12345");
-			System.out.println("[Size File Storage] cicchio ha " + a + " file salvati");
+			dropbox.put("pippo", "12345", "file2");
+			System.out.println("[File Uploaded] L'utente: <pippo> ha caricato il file: <file2>");
+			a = dropbox.getSize("pippo", "12345");
+			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
 			
-			dropbox.put("cicchio", "12345", "file1");
-			a = dropbox.getSize("cicchio", "12345");
-			System.out.println("[Size File Storage] cicchio ha " + a + " file salvati");
+			dropbox.put("pippo", "12345", "file3");
+			System.out.println("[File Uploaded] L'utente: <pippo> ha caricato il file: <file3>");
+			a = dropbox.getSize("pippo", "12345");
+			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
 			
-			String receive = dropbox.get("cicchio", "12345", "file1");
-			System.out.println("[Download] cicchio ha scaricato una copia di " + receive);
-			a = dropbox.getSize("cicchio", "12345");
-			System.out.println("[Size File Storage] cicchio ha " + a + " file salvati");
+			dropbox.put("pippo", "12345", "file4");
+			System.out.println("[File Uploaded] L'utente: <pippo> ha caricato il file: <file4>");
+			a = dropbox.getSize("pippo", "12345");
+			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
 			
-			receive = dropbox.remove("cicchio", "12345", "file1");
-			System.out.println("[Remove] cicchio ha eliminato " + receive + " dal suo file storage");
-			a = dropbox.getSize("cicchio", "12345");
-			System.out.println("[Size File Storage] cicchio ha " + a + " file salvati");
+			receive = dropbox.get("pippo", "12345", "file1");
+			System.out.println("[Download] L'utente <pippo> ha scaricato una copia di " + receive);
+			a = dropbox.getSize("pippo", "12345");
+			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
 			
-			dropbox.copy("cicchio", "12345", "file1");
-			System.out.println("[Copy] cicchio ha effettuato una copia");
-			a = dropbox.getSize("cicchio", "12345");
-			System.out.println("[Size File Storage] cicchio ha " + a + " file salvati");
+			receive = dropbox.remove("pippo", "12345", "file1");
+			System.out.println("[Remove] L'utente <pippo> ha rimosso " + receive);
+			a = dropbox.getSize("pippo", "12345");
+			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
+			
+			receive = dropbox.remove("pippo", "12345", "file4");
+			System.out.println("[Remove] L'utente <pippo> ha rimosso " + receive);
+			a = dropbox.getSize("pippo", "12345");
+			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
+			
+			dropbox.copy("pippo", "12345", "file2");
+			System.out.println("[Copy] L'utente <pippo> ha copiato il file: <file2>");
+			a = dropbox.getSize("pippo", "12345");
+			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
+			
+			dropbox.copy("pippo", "12345", "file2");
+			System.out.println("[Copy] L'utente <pippo> ha copiato il file: <file2>");
+			a = dropbox.getSize("pippo", "12345");
+			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
+			
+			// a questo punto dovrei avere 3 file2 e 1 file3
+			
+			Iterator<String> it = dropbox.getIterator("pippo","12345");
+			while (it.hasNext()) {
+			  String p = it.next();
+			  System.out.println(p);
+			}
 			
 		} catch (NullPointerException | UserAlreadyRegisteredException | WeakPasswordException | IllegalUsernameException | UserNotFoundException | WrongPasswordException | NoDataException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
