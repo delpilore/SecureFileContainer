@@ -61,24 +61,8 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		if (!security.get(Owner).equals(passw))
 			throw new WrongPasswordException("Hai inserito una password sbagliata!");
 		
-		if(data.get(Owner).size()==0) {
-			data.get(Owner).add(new MyFile<E>(Owner, file));
-			return true;
-		}
-		
-		E temp =  data.get(Owner).get(0).getData();
-		int i=1;
-		
-		while(!temp.equals(file) && i<data.get(Owner).size()){
-			temp = data.get(Owner).get(i).getData();
-			i++;
-		}
-		
-		if (temp!=file)
-			data.get(Owner).add(new MyFile<E>(Owner, file));
-		else
-			System.out.println("Il tuo file era già salvato nello storage, non è stata apportata alcuna modifica");
-		
+		data.get(Owner).add(new MyFile<E>(Owner, file));
+
 		return true;
 		
 	}
