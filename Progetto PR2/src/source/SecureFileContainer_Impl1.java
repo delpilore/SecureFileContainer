@@ -156,7 +156,7 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		if (temp!=file)
 			throw new NoDataException("Il file che vuoi copiare non esiste nel file storage!");
 		else 
-			data.get(Owner).add(new MyFile<E> (Owner, file));
+			this.put(Owner, passw, file);
 		
 	}
 
