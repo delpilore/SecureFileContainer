@@ -30,7 +30,7 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 			throw new IllegalUsernameException("Il tuo username è troppo corto!");
 		
 	    security.put(Id, passw);
-        data.put(Id, new ArrayList<>(0));	
+        data.put(Id, new ArrayList<File<E>>(0));	
 	}
 
 
@@ -89,12 +89,18 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 			i++;
 		}
 		
-		
 		if (temp!=file)
 			throw new NoDataException("Il file da te richiesto non esiste nel file storage!");
-		else
+		else {
+			File<E> check = data.get(Owner).get(i-1);
+			if(!check.getOwner().equals(Owner)) {
+				if(check.isSharedR(Owner))
+					System.out.println("Il file: <" + file + "> che stai per scaricare, ti è stato condiviso da " + check.getOwner() + " in sola lettura!");
+				else
+					System.out.println("Il file: <" + file + "> che stai per scaricare ti è stato condiviso da " + check.getOwner() + " in lettura/scrittura!");
+			}
 			return temp;
-		
+		}
 	}
 
 
@@ -160,25 +166,97 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		
 	}
 
-	@Override
-	public void shareR(String Owner, String passw, String Other, E file)
-			throws NullPointerException, UserNotFoundException, WrongPasswordException, NoDataException {
-		// TODO Auto-generated method stub
+
+	public void shareR(String Owner, String passw, String Other, E file) throws NullPointerException, UserNotFoundException, WrongPasswordException, NoDataException {
+		
+		if (Owner==null || passw==null || file==null)
+			throw new NullPointerException();
+		
+		if (!security.containsKey(Owner))
+			throw new UserNotFoundException("L'utente non è registrato al file storage!");
+		
+		if (!security.containsKey(Other))
+			throw new UserNotFoundException("L'utente con cui vuoi condividere il file in sola lettura, non è registrato al file storage!");
+		
+		if (!security.get(Owner).equals(passw))
+			throw new WrongPasswordException("Hai inserito una password sbagliata!");
+		
+		if (data.get(Owner).size()==0)
+			throw new NoDataException("Il tuo file storage è vuoto!");
+		
+		E temp =  data.get(Owner).get(0).getData();
+		int i=1;
+		
+		while(!temp.equals(file) && i<data.get(Owner).size()){
+			temp = data.get(Owner).get(i).getData();
+			i++;
+		}
+		
+		
+		if (temp!=file)
+			throw new NoDataException("Il file che vuoi condividere in lettura, non esiste nel file storage!");
+		else {
+			data.get(Owner).get(i-1).setShareR(Other);
+			data.get(Other).add(data.get(Owner).get(i-1));
+		}
+	}
+
+
+	public void shareW(String Owner, String passw, String Other, E file) throws NullPointerException, UserNotFoundException, WrongPasswordException, NoDataException {
+		
+		if (Owner==null || passw==null || file==null)
+			throw new NullPointerException();
+		
+		if (!security.containsKey(Owner))
+			throw new UserNotFoundException("L'utente non è registrato al file storage!");
+		
+		if (!security.containsKey(Other))
+			throw new UserNotFoundException("L'utente con cui vuoi condividere il file in sola lettura, non è registrato al file storage!");
+		
+		if (!security.get(Owner).equals(passw))
+			throw new WrongPasswordException("Hai inserito una password sbagliata!");
+		
+		if (data.get(Owner).size()==0)
+			throw new NoDataException("Il tuo file storage è vuoto!");
+		
+		E temp =  data.get(Owner).get(0).getData();
+		int i=1;
+		
+		while(!temp.equals(file) && i<data.get(Owner).size()){
+			temp = data.get(Owner).get(i).getData();
+			i++;
+		}
+		
+		
+		if (temp!=file)
+			throw new NoDataException("Il file che vuoi condividere in scrittura, non esiste nel file storage!");
+		else {
+			data.get(Owner).get(i-1).setShareW(Other);
+			data.get(Other).add(data.get(Owner).get(i-1));
+		}
 		
 	}
 
-	@Override
-	public void shareW(String Owner, String passw, String Other, E file)
-			throws NullPointerException, UserNotFoundException, WrongPasswordException, NoDataException {
-		// TODO Auto-generated method stub
+	public Iterator<E> getIterator(String Owner, String passw) throws NullPointerException, UserNotFoundException, WrongPasswordException {
 		
-	}
-
-	@Override
-	public Iterator<E> getIterator(String Owner, String passw)
-			throws NullPointerException, UserNotFoundException, WrongPasswordException {
-		// TODO Auto-generated method stub
-		return null;
+		if (Owner==null || passw==null)
+			throw new NullPointerException();
+		
+		if (!security.containsKey(Owner))
+			throw new UserNotFoundException("L'utente non è registrato al file storage!");
+		
+		if (!security.get(Owner).equals(passw))
+			throw new WrongPasswordException("Hai inserito una password sbagliata!");
+		
+		ArrayList<E> temp = new ArrayList<E>();
+		
+		for (int i=0; i<data.get(Owner).size(); i++){
+			  File<E> p = data.get(Owner).get(i);
+			  temp.add(p.getData());
+		}
+		
+		Iterator<E> it = temp.iterator();
+		return it;
 	}
 
 
