@@ -22,7 +22,7 @@ public interface SecureFileContainer<E> {
 	 * THROWS: Se Id==null || passw==null -> NullPointerException (eccezione disponibile in Java, unchecked)
 	 * 		   Se Id esiste già nella collezione -> UserAlreadyRegisteredException (eccezione non disponibile in Java, checked)
 	 * 		   Se passw.length < 5 -> WeakPasswordException (eccezione non disponibile in Java, checked)
-	 * 		   Se Id.length < 2 -> IllegalUsernameException (eccezione non disponibili in Java, checked)
+	 * 		   Se Id.length < 2 -> IllegalUsernameException (eccezione non disponibile in Java, checked)
 	 * MODIFIES: this
 	 * EFFECTS: Viene creato ed inserito nella collezione, l'elemento <Id, passw, <>>
 	 */
@@ -94,7 +94,7 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * 		   Se la coppia <Owner, passw> esiste nella collezione, ma non esiste il file E da condividere in lettura -> NoDataException (eccezione non disponibile in Java, checked)
 	 * MODIFIES: this
-	 * EFFECTS: Il campo files E della tripla <Other, passw, <files E>> sarà arricchito da un riferimento al file E condiviso da Owners, disponibile in sola lettura.
+	 * EFFECTS: Il campo <files E> della tripla <Other, passw, <files E>> sarà arricchito dal file E condiviso da Owner, disponibile in sola lettura.
 	 */
 	
 	// Condivide in lettura e scrittura il file nella collezione con un altro utente se vengono rispettati i controlli di identità
@@ -106,7 +106,7 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * 		   Se la coppia <Owner, passw> esiste nella collezione, ma non esiste il file E da condividere in lettura e scrittura -> NoDataException (eccezione non disponibile in Java, checked)
 	 * MODIFIES: this
-	 * EFFECTS: Il campo files E della tripla <Other, passw, <files E>> sarà arricchito da un riferimento al file E condiviso da Owners, disponibile in lettura e scrittura.
+	 * EFFECTS: Il campo <files E> della tripla <Other, passw, <files E>> sarà arricchito dal file E condiviso da Owner, disponibile in lettura e scrittura.
 	 */
 	
 	// Restituisce un iteratore (senza remove) che genera tutti i file dell’utente in ordine arbitrario se vengono rispettati i controlli di identità
@@ -125,6 +125,7 @@ public interface SecureFileContainer<E> {
 	 */
 	
 	@SuppressWarnings("serial")
+	// Eccezione lanciata quando si tenta di iscrivere un Utente già iscritto (eccezione checked, non presente in java)
 	class UserAlreadyRegisteredException extends Exception {
 
 		public UserAlreadyRegisteredException() {
@@ -137,6 +138,7 @@ public interface SecureFileContainer<E> {
     }
 	
 	@SuppressWarnings("serial")
+	// Eccezione lanciata quando si tenta di iscrivere un Utente con una password più corta di 5 caratteri (eccezione checked, non presente in java)
 	class WeakPasswordException extends Exception {
 
 		public WeakPasswordException() {
@@ -149,6 +151,7 @@ public interface SecureFileContainer<E> {
     }
 	
 	@SuppressWarnings("serial")
+	// Eccezione lanciata quando viene richiesta un'operazione su un utente che non è iscritto alla collezione (eccezione checked, non presente in java)
 	class UserNotFoundException extends Exception {
 
 		public UserNotFoundException() {
@@ -161,6 +164,7 @@ public interface SecureFileContainer<E> {
     }
 	
 	@SuppressWarnings("serial")
+	// Eccezione lanciata quando, durante il controllo accesso, l'utente iscritto alla collezione inserisce la password sbagliata (eccezione checked, non presente in java)
 	class WrongPasswordException extends Exception {
 
 		public WrongPasswordException() {
@@ -173,6 +177,7 @@ public interface SecureFileContainer<E> {
     }
 	
 	@SuppressWarnings("serial")
+	// Eccezione lanciata quando un utente tenta di fare un'operazione su un dato che non esiste nella sua collezione di files E (eccezione checked, non presente in java)
 	class NoDataException extends Exception {
 
 		public NoDataException() {
@@ -185,6 +190,7 @@ public interface SecureFileContainer<E> {
     }
 	
 	@SuppressWarnings("serial")
+	// Eccezione lanciata quando si tenta di iscrivere un Utente con un username più corto di 2 caratteri (eccezione checked, non presente in java)
 	class IllegalUsernameException extends Exception {
 
 		public IllegalUsernameException() {
