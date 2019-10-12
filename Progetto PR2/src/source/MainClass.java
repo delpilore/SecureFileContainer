@@ -78,6 +78,86 @@ public class MainClass {
 			  System.out.println(p);
 			}
 			
+			System.out.println("*****PROVA SHARING*****");
+			
+			dropbox.put("giovanni", "12345", "file5");
+			System.out.println("[File Uploaded] L'utente: <giovanni> ha caricato il file: <file5>");
+			a = dropbox.getSize("giovanni", "12345");
+			System.out.println("[Size File Storage] L'utente <giovanni> ha " + a + " file salvati");
+			
+			dropbox.put("giovanni", "12345", "file1");
+			System.out.println("[File Uploaded] L'utente: <giovanni> ha caricato il file: <file1>");
+			a = dropbox.getSize("giovanni", "12345");
+			System.out.println("[Size File Storage] L'utente <giovanni> ha " + a + " file salvati");
+			
+			dropbox.shareW("pippo", "12345", "giovanni", "file2");
+			System.out.println("[SHARING] L'utente: <pippo> ha condiviso in scrittura il file <file2> all'utente <giovanni>");
+			a = dropbox.getSize("giovanni", "12345");
+			System.out.println("[Size File Storage] L'utente <giovanni> ha " + a + " file salvati");
+			
+			dropbox.shareR("pippo", "12345", "giovanni", "file3");
+			System.out.println("[SHARING] L'utente: <pippo> ha condiviso in lettura il file <file3> all'utente <giovanni>");
+			a = dropbox.getSize("giovanni", "12345");
+			System.out.println("[Size File Storage] L'utente <giovanni> ha " + a + " file salvati");
+			
+			dropbox.shareW("giovanni", "12345", "pippo", "file1");
+			System.out.println("[SHARING] L'utente: <giovanni> ha condiviso in scrittura il file <file1> all'utente <pippo>");
+			a = dropbox.getSize("pippo", "12345");
+			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
+			
+			System.out.println("*****PIPPO*****"); //pippo dovrebbe avere 3 file 2, 1 file 3, 1 file 1, in totale 5 file
+			
+			it = dropbox.getIterator("pippo","12345");
+			while (it.hasNext()) {
+			  String p = it.next();
+			  System.out.println(p);
+			}
+			 
+			System.out.println("*****GIOVANNI*****"); //giovanni dovrebbe avere 1 file 5, 1 file 1, 1 file 2 e 1 file 3
+			
+			it = dropbox.getIterator("giovanni","12345");
+			while (it.hasNext()) {
+			  String p = it.next();
+			  System.out.println(p);
+			}
+			
+			receive = dropbox.get("pippo", "12345", "file1");
+			System.out.println("[Download] L'utente <pippo> ha scaricato una copia di " + receive);
+			
+			receive = dropbox.get("pippo", "12345", "file2");
+			System.out.println("[Download] L'utente <pippo> ha scaricato una copia di " + receive);
+			
+			receive = dropbox.get("pippo", "12345", "file3");
+			System.out.println("[Download] L'utente <pippo> ha scaricato una copia di " + receive);
+			
+			receive = dropbox.get("giovanni", "12345", "file1");
+			System.out.println("[Download] L'utente <giovanni> ha scaricato una copia di " + receive);
+			
+			receive = dropbox.get("giovanni", "12345", "file2");
+			System.out.println("[Download] L'utente <giovanni> ha scaricato una copia di " + receive); // condiviso in lettura scrittura da pippo
+			
+			receive = dropbox.get("giovanni", "12345", "file3");
+			System.out.println("[Download] L'utente <giovanni> ha scaricato una copia di " + receive); // condiviso in sola lettura da pippo
+			
+			receive = dropbox.get("giovanni", "12345", "file5");
+			System.out.println("[Download] L'utente <giovanni> ha scaricato una copia di " + receive);
+			
+			System.out.println("*****PIPPO*****"); //pippo dovrebbe avere 3 file 2, 1 file 3, 1 file 1, in totale 5 file
+			
+			it = dropbox.getIterator("pippo","12345");
+			while (it.hasNext()) {
+			  String p = it.next();
+			  System.out.println(p);
+			}
+			 
+			System.out.println("*****GIOVANNI*****"); //giovanni dovrebbe avere 1 file 5, 1 file 1, 1 file 2 e 1 file 3
+			
+			it = dropbox.getIterator("giovanni","12345");
+			while (it.hasNext()) {
+			  String p = it.next();
+			  System.out.println(p);
+			}
+
 		} catch (NullPointerException | UserAlreadyRegisteredException | WeakPasswordException | IllegalUsernameException | UserNotFoundException | WrongPasswordException | NoDataException e) {
 			e.printStackTrace();
 		}
