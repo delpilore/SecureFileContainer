@@ -10,8 +10,9 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 	
     // IR = (c.security != null) && (c.data != null)
     //		&& (c.data.containsKey(Id) <=> c.security.containsKey(Id))
-	//		&& (c.data.containsKey(Id) => c.data.get(Id) != null)
 	//		&& (a = c.security.keySet(), for all i,j. 0 <= i,j < a.size(), a(i) != a(j))
+	//		&& (c.security.containsKey(Id) <=> c.security.get(Id) != null)
+	//		&& (c.data.containsKey(Id) <=> c.data.get(Id) != null)
 
 	private HashMap<String, String> security; 				// Struttura dati per il controllo degli accessi ai dati, attraverso l'associazione utente password
 	private HashMap<String, ArrayList<File<E>>> data; 		// Struttura dati per il salvataggio dei file relativi ad un utente (previo accesso controllato con "security")
@@ -49,8 +50,8 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
         data.put(Id, new ArrayList<File<E>>(0)); 			// Aggiungo alla struttura dati per il salvataggio dei file, l'associazione tra l'username Id e un oggetto ArrayList inizializzato a 0 e istanziato per contenere File<E>
 	}
 	/*
-	 * Questo metodo preserva l'IR perchè non permette l'inserimento di un utente già presente (non ammette quindi duplicati nelle key, come da ultima condizione dell'IR)
-	 * Inserisce la key Id sia in c.security che in c.data, come da seconda condizione dell'IR e istanzia c.data.get(Id) in modo che sia != null, come da terza condizione
+	 * Questo metodo preserva l'IR perchè non permette l'inserimento di un utente già presente (non ammette quindi duplicati nelle key, come da IR)
+	 * Inserisce la key Id sia in c.security (insieme alla passw) che in c.data e istanzia c.data.get(Id) in modo che sia != null, come da IR.
 	 */
 
 	// Restituisce il numero dei file di un utente presenti nella collezione
@@ -102,7 +103,8 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		
 	}
 	/*
-	 * Questo metodo preserva l'IR visto che va semplicemente ad aggiungere un file a c.data.get(Owner) mantenendo tutto il resto inalterato.
+	 * Questo metodo preserva l'IR visto che va semplicemente ad aggiungere un file a c.data.get(Owner), se quest'ultimo risulta registrato correttamente al sistema.
+	 * security.containsKey(Owner) && data.containsKey(Owner) 
 	 */
 
 	// Ottiene una copia del file nella collezione se vengono rispettati i controlli di identità
@@ -139,8 +141,8 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 			// Se il file non è stato trovato lancio un'eccezione
 			throw new NoDataException("Il file da te richiesto non esiste nel file storage!"); 
 		else {
-			// Se il file è stato trovato procedo con il controllare chi è il vero proprietario del file. 
-			// In caso non sia Owner, controllo che tipo di accesso gli è stato fornito al file e chi è il proprietario originale del suddetto.
+			// Se il file E è stato trovato, procedo con il controllare chi è il vero proprietario del file. 
+			// In caso non sia Owner, controllo che tipo di accesso gli è stato fornito, chi è il proprietario originale e infine, ritorno il file E.
 			// Altrimenti, in caso il proprietario sia proprio Owner, restituisco il file E comunicando la possibilità di accesso in lettura/scrittura.
 			File<E> check = files_temp.get(i-1);
 			if(!check.getOwner().equals(Owner)) {			// Se Owner non è il vero proprietario del file		
