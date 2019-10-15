@@ -37,7 +37,7 @@ public interface SecureFileContainer<E> {
 	 * RETURN: Numero dei files E, associati all'utente identificato da <Owner, passw>
 	 */
 	
-	// Inserisce il il file nella collezione se vengono rispettati i controlli di identità
+	// Inserisce il file nella collezione se vengono rispettati i controlli di identità
 	public boolean put(String Owner, String passw, E file) throws NullPointerException, UserNotFoundException, WrongPasswordException;
 	/*
 	 * REQUIRES: Owner!=null && passw!=null && file!=null
@@ -46,7 +46,7 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * MODIFIES: this
 	 * EFFECTS: Viene inserito il file E nella collezione, associato all'utente identificato da <Owner, passw>
-	 * RETURN: true se il file E viene correttamente inserito, false non viene mai ritornato perchè preceduto sempre da un'eccezione.
+	 * RETURN: true se il file E viene correttamente inserito
 	 */
 	
 	// Ottiene una copia del file nella collezione se vengono rispettati i controlli di identità
