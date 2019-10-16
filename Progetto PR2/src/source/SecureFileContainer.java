@@ -2,6 +2,8 @@ package source;
 
 import java.util.Iterator;
 
+//AUTHOR: Lorenzo Del Prete, Corso B, 531417
+
 public interface SecureFileContainer<E> {
 	
 	/*
