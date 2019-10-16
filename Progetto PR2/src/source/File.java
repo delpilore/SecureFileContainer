@@ -9,9 +9,9 @@ public interface File<E> {
 	 * 
 	 * TYPICAL ELEMENT: <Dato E, Owner, SharedW, SharedR> 
 	 * 					 Dato E: il dato E da incapsulare
-	 * 					 Owner: il possessore del dato E
-	 * 					 SharedW: l'elenco di utenti a cui è consentito l'accesso in lettura/scrittura al dato E
-	 * 					 SharedR: l'elenco di utenti a cui è consentito l'accesso in sola lettura al dato E
+	 * 					 Owner: il proprietario di Dato E
+	 * 					 SharedW: l'elenco di utenti a cui è consentito l'accesso in lettura/scrittura a Dato E
+	 * 					 SharedR: l'elenco di utenti a cui è consentito l'accesso in sola lettura a Dato E
 	 */
 	
 	// Restituisce il nome del proprietario del dato E
@@ -23,7 +23,7 @@ public interface File<E> {
 	// Restituisce il dato E 
 	public E getData();
 	/*
-	 * RETURN: Il dato E relativo alla quadrupla <Dato E, Owner, SharedW, SharedR>
+	 * RETURN: Il Dato E relativo alla quadrupla <Dato E, Owner, SharedW, SharedR>
 	 */
 	
 	// Segna il dato E come condiviso in scrittura/lettura con Other 
@@ -51,7 +51,7 @@ public interface File<E> {
 	/*
 	 * REQUIRES: Other!=null
 	 * THROWS: Se Other==null -> NullPointerException (eccezione disponibile in Java, unchecked)
-	 * RETURN: true se Other è contenuto nell'elenco <SharedW>, false altrimenti
+	 * RETURN: true se Other è contenuto nell'elenco <SharedW> relativo alla quadrupla <Dato E, Owner, SharedW, SharedR>, false altrimenti
 	 */
 	
 	// Restituisce true se il dato E risulta condiviso in sola lettura con Other, false altrimenti
@@ -59,7 +59,7 @@ public interface File<E> {
 	/*
 	 * REQUIRES: Other!=null
 	 * THROWS: Se Other==null -> NullPointerException (eccezione disponibile in Java, unchecked)
-	 * RETURN: true se Other è contenuto nell'elenco <SharedR>, false altrimenti
+	 * RETURN: true se Other è contenuto nell'elenco <SharedR> relativo alla quadrupla <Dato E, Owner, SharedW, SharedR>, false altrimenti
 	 */
 
 }
