@@ -36,7 +36,7 @@ public interface SecureFileContainer<E> {
 	 * THROWS: Se Owner==null || passw==null -> NullPointerException (eccezione disponibile in Java, unchecked)
 	 * 		   Se Owner non esiste nella collezione -> UserNotFoundException (eccezione non disponibile in Java, checked)
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
-	 * RETURN: Numero dei files E, associati all'utente identificato da <Owner, passw>
+	 * RETURN: Numero dei <files E>, relativi alla tripla <Owner, passw, <files E>>
 	 */
 	
 	// Inserisce il file nella collezione se vengono rispettati i controlli di identità
@@ -47,8 +47,8 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner non esiste nella collezione -> UserNotFoundException (eccezione non disponibile in Java, checked)
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * MODIFIES: this
-	 * EFFECTS: Viene inserito il file E nella collezione, associato all'utente identificato da <Owner, passw>
-	 * RETURN: true se il file E viene correttamente inserito
+	 * EFFECTS: Viene inserito il file E, nel campo <files E> della tripla <Owner, passw, <files E>>
+	 * RETURN: true quando il file E viene inserito, false altrimenti
 	 */
 	
 	// Ottiene una copia del file nella collezione se vengono rispettati i controlli di identità
@@ -59,7 +59,7 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner non esiste nella collezione -> UserNotFoundException (eccezione non disponibile in Java, checked)
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * 		   Se la coppia <Owner,passw> esiste nella collezione, ma non esiste il file E da ottenere -> NoDataException (eccezione non disponibile in Java, checked)
-	 * RETURN: Una copia del file E ricercato
+	 * RETURN: Una copia del file E, rintracciato nel campo <files E> della tripla <Owner, passw, <files E>>
 	 */
 	
 	// Rimuove il file dalla collezione se vengono rispettati i controlli di identità
@@ -71,7 +71,7 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * 		   Se la coppia <Owner,passw> esiste nella collezione, ma non esiste il file E da rimuovere -> NoDataException (eccezione non disponibile in Java, checked)
 	 * MODIFIES: this
-	 * EFFECTS: Rimuove il file E relativo alla coppia <Owner,passw> dalla collezione
+	 * EFFECTS: Viene rimosso il file E, dal campo <files E> della tripla <Owner, passw, <files E>>
 	 * RETURN: Il file che è stato rimosso
 	 */
 	
@@ -84,7 +84,7 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * 		   Se la coppia <Owner,passw> esiste nella collezione, ma non esiste il file E da copiare -> NoDataException (eccezione non disponibile in Java, checked)
 	 * MODIFIES: this
-	 * EFFECTS: Copia il file contenuto nella collezione, nella collezione stessa
+	 * EFFECTS: Viene inserito un duplicato del file E, nel campo <files E> della tripla <Owner, passw, <files E>>
 	 */
 	
 	// Condivide in lettura il file nella collezione con un altro utente se vengono rispettati i controlli di identità
@@ -118,7 +118,7 @@ public interface SecureFileContainer<E> {
 	 * THROWS: Se Owner==null || passw==null -> NullPointerException (eccezione disponibile in Java, unchecked)
 	 * 		   Se Owner non esiste nella collezione -> UserNotFoundException (eccezione non disponibile in Java, checked)
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
-	 * RETURN: Iteratore sui files E della collezione, relativi alla coppia <Owner,passw>
+	 * RETURN: Iteratore sui <files E> relativi alla tripla <Owner, passw, <files E>>
 	 */
 	
 	
