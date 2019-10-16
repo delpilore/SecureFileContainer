@@ -4,28 +4,25 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.ArrayList;
 
+// AUTHOR: Lorenzo Del Prete, Corso B, 531417
+
+// IMPORTANTE: Questa implementazione di SecureFileContainer<E> utilizza in larga parte il tipo File<E>, creato da me come supporto alle operazione del file storage.
+//			   Per una lettura più chiara del codice seguente consultare la relazione, o i file File.java e MyFile.java.
+
 public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 	
     // AF(c) = { < Id, c.security.get(Id), <c.data.get(Id)> > | c.security.containsKey(Id) }
 	
     // IR = (c.security != null) && (c.data != null)
     //		&& (c.data.containsKey(Id) <=> c.security.containsKey(Id))
-	//		&& (a = c.security.keySet(), for all i,j. 0 <= i,j < a.size(), a(i) != a(j))
+	//		&& (a = c.security.keySet(), for all i,j. 0 <= i,j < a.size(), i!=j => a(i) != a(j))
 	//		&& (c.security.containsKey(Id) <=> c.security.get(Id) != null)
 	//		&& (c.data.containsKey(Id) <=> c.data.get(Id) != null)
-	//      && (Exists i | c.data.get(Id).get(i).getOwner()!=Id => c.data.get(Id).get(i).isSharedR(Id) XOR c.data.get(Id).get(i).isSharedW(Id))
 	
-	private HashMap<String, String> security; 				// Struttura dati per il controllo degli accessi ai dati, attraverso l'associazione utente password
+	private HashMap<String, String> security; 				// Struttura dati per il controllo degli accessi ai dati, attraverso l'associazione <utente, password>
 	
-	private HashMap<String, ArrayList<File<E>>> data; 		// Struttura dati per il salvataggio dei file relativi ad un utente (previo accesso controllato con "security").
-															// L'array che conterrà i file, conterrà oggetti di tipo astratto File<E>. 
-															// Questi ultimi fungono da "incapsulatori" dei file E passati dall'utente a SecureFileContainer, in modo da tenere
-															// traccia, oltre che del file E stesso, di altre informazioni su di esso, quali: 
-															// 1. il nome del proprietario originale del file
-															// 2. i nomi di coloro che hanno l'accesso in lettura al file
-															// 3. i nomi di coloro che hanno l'accesso sia in lettura che in scrittura al file 
-															// Inizialmente, questi ultimi due campi saranno abitati solo da Owner, che potrà in futuro scegliere altri utenti a cui dare i permessi.
-															// (per altri dettagli consultare la relazione, o i commenti nei file specifici File.java e MyFile.java)
+	private HashMap<String, ArrayList<File<E>>> data; 		// Struttura dati per il salvataggio dei file, attraverso l'associazione <utente, <files>> (previo accesso controllato con "security").
+															// L'array che conterrà i files, conterrà oggetti di tipo astratto File<E>. 
 	
 	// Metodo costruttore che inizializza le due strutture dati 
 	public SecureFileContainer_Impl1() {
@@ -147,7 +144,7 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 			// getOwner() è un metodo pubblico fornito da File<E>, si limita a restituire il nome del proprietario originale del file.
 			if(!check.getOwner().equals(Owner)) {	
 				// Controllo i permessi d'accesso forniti ad Owner dal vero proprietario con isSharedR che è un metodo pubblico fornito da File<E>
-				// Esso controlla che se il nome di Owner è presente tra i nomi di utenti che hanno l'accesso in lettura al file in questione
+				// Esso controlla se il nome di Owner è presente tra i nomi di utenti che hanno l'accesso in lettura al file in questione
 				if(check.isSharedR(Owner))					
 					System.out.println("[Download] Il file: <" + file + "> che " + Owner + " sta per scaricare, è stato condiviso da " + check.getOwner() + " in sola lettura!");
 				else
@@ -311,6 +308,9 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		}
 		
 	}
+	/*
+	 * Questo metodo preserva l'IR perchè aggiunge semplicemente un file a data.get(Other) senza compromettere nessuna condizione dell'IR.
+	 */
 	
 	// Restituisce un iteratore (senza remove) che genera tutti i file dell’utente in ordine arbitrario se vengono rispettati i controlli di identità
 	public Iterator<E> getIterator(String Owner, String passw) throws NullPointerException, UserNotFoundException, WrongPasswordException {
@@ -341,10 +341,13 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		Iterator<E> it = temp.iterator();
 		return it;
 	}
+	/*
+	 * Questo metodo preserva banalmente l'IR visto che è semplicemente un'osservatore
+	 */
 	
 	
 	
-	// Il compito di questo metodo è rintracciare il File<E> dell'ArrayList<File<E>> (proprio di Owner), che incapsula l'E file ricercato (Comparison)
+	// Il compito di questo metodo è rintracciare il File<E>, che incapsula il file E originariamente ricercato (Comparison), dell'ArrayList<File<E>> (proprio di Owner)
 	// Se questo non dovesse esistere, verrà ritornato null.
 	private File<E> searchFor(String Owner, E Comparison) {
 
@@ -365,6 +368,8 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		else
 			return null;
 	}
-
+	/*
+	 * Questo metodo preserva banalmente l'IR visto che è semplicemente un'osservatore
+	 */
 
 }

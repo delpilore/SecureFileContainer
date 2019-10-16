@@ -157,6 +157,27 @@ public class MainClass {
 			  String p = it.next();
 			  System.out.println(p);
 			}
+			
+			receive = dropbox.remove("giovanni", "12345", "file2");
+			receive = dropbox.remove("giovanni", "12345", "file3");
+			
+			System.out.println("*****PIPPO*****"); //pippo dovrebbe avere 3 file 2, 1 file 3, 1 file 1, in totale 5 file
+			
+			it = dropbox.getIterator("pippo","12345");
+			while (it.hasNext()) {
+			  String p = it.next();
+			  System.out.println(p);
+			}
+			 
+			System.out.println("*****GIOVANNI*****"); //giovanni dovrebbe avere 1 file 5, 1 file 1, 1 file 2 e 1 file 3
+			
+			it = dropbox.getIterator("giovanni","12345");
+			while (it.hasNext()) {
+			  String p = it.next();
+			  System.out.println(p);
+			}
+			
+			
 
 		} catch (NullPointerException | UserAlreadyRegisteredException | WeakPasswordException | IllegalUsernameException | UserNotFoundException | WrongPasswordException | NoDataException e) {
 			e.printStackTrace();
