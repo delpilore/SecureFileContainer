@@ -1,6 +1,6 @@
 package source;
 
-//AUTHOR: Lorenzo Del Prete, Corso B, 531417
+// AUTHOR: Lorenzo Del Prete, Corso B, 531417
 
 public interface File<E> {
 	
