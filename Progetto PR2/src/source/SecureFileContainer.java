@@ -112,12 +112,13 @@ public interface SecureFileContainer<E> {
 	 */
 	
 	// Restituisce un iteratore (senza remove) che genera tutti i file dell’utente in ordine arbitrario se vengono rispettati i controlli di identità
-	public Iterator<E> getIterator(String Owner, String passw) throws NullPointerException, UserNotFoundException, WrongPasswordException;
+	public Iterator<E> getIterator(String Owner, String passw) throws NullPointerException, UserNotFoundException, WrongPasswordException, NoDataException;
 	/*
 	 * REQUIRES: Owner!=null && passw!=null
 	 * THROWS: Se Owner==null || passw==null -> NullPointerException (eccezione disponibile in Java, unchecked)
 	 * 		   Se Owner non esiste nella collezione -> UserNotFoundException (eccezione non disponibile in Java, checked)
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
+	 * 		   Se la coppia <Owner, passw> esiste nella collezione, ma l'insieme <files E> relativo è vuoto -> NoDataException  (eccezione non disponibile in Java, checked)
 	 * RETURN: Iteratore sui <files E> relativi alla tripla <Owner, passw, <files E>>
 	 */
 	
