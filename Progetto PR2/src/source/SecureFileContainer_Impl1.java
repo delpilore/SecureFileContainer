@@ -42,13 +42,13 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 			throw new NullPointerException();
 		
 		if (security.containsKey(Id))
-			throw new UserAlreadyRegisteredException(Id + " è già registrato!");
+			throw new UserAlreadyRegisteredException();
 		
 		if (passw.length() < 5)
-			throw new WeakPasswordException("La tua password è troppo corta!");
+			throw new WeakPasswordException();
 
 		if (Id.length() < 2)
-			throw new IllegalUsernameException("Il tuo username è troppo corto!");
+			throw new IllegalUsernameException();
 		
 		//-----FINE CONTROLLI PRELIMINARI-----//
 		
@@ -69,10 +69,10 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 			throw new NullPointerException();
 		
 		if (!security.containsKey(Owner))
-			throw new UserNotFoundException("L'utente non è registrato al file storage!");
+			throw new UserNotFoundException();
 
 		if (!security.get(Owner).equals(passw))
-			throw new WrongPasswordException("Hai inserito una password sbagliata!");
+			throw new WrongPasswordException();
 		
 		//-----FINE CONTROLLI PRELIMINARI-----//
 		
@@ -93,10 +93,10 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 			throw new NullPointerException();
 		
 		if (!security.containsKey(Owner))
-			throw new UserNotFoundException("L'utente non è registrato al file storage!");
+			throw new UserNotFoundException();
 
 		if (!security.get(Owner).equals(passw))
-			throw new WrongPasswordException("Hai inserito una password sbagliata!");
+			throw new WrongPasswordException();
 		
 		//-----FINE CONTROLLI PRELIMINARI-----//
 		
@@ -121,13 +121,13 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 			throw new NullPointerException();
 		
 		if (!security.containsKey(Owner))
-			throw new UserNotFoundException("L'utente non è registrato al file storage!");
+			throw new UserNotFoundException();
 		
 		if (!security.get(Owner).equals(passw))
-			throw new WrongPasswordException("Hai inserito una password sbagliata!");
+			throw new WrongPasswordException();
 		
-		if (data.get(Owner).size()==0)
-			throw new NoDataException("Il tuo file storage è vuoto!");
+		if (this.getSize(Owner, passw)==0)
+			throw new NoDataException();
 		
 		//-----FINE CONTROLLI PRELIMINARI-----//
 		
@@ -136,7 +136,7 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 
 		if (check==null)				
 			// Se il file non è stato trovato lancio un'eccezione
-			throw new NoDataException("Il file da te richiesto non esiste nel file storage!"); 
+			throw new NoDataException(); 
 		else {
 			// Se il file E è stato trovato, procedo con il controllare chi è il vero proprietario del file. 
 			// In caso non sia Owner, controllo che tipo di accesso gli è stato fornito, chi è il proprietario originale e infine, ritorno il file E.
@@ -171,13 +171,13 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 			throw new NullPointerException();
 		
 		if (!security.containsKey(Owner))
-			throw new UserNotFoundException("L'utente non è registrato al file storage!");
+			throw new UserNotFoundException();
 		
 		if (!security.get(Owner).equals(passw))
-			throw new WrongPasswordException("Hai inserito una password sbagliata!");
+			throw new WrongPasswordException();
 			
-		if (data.get(Owner).size()==0)
-			throw new NoDataException("Il tuo file storage è vuoto!");
+		if (this.getSize(Owner, passw)==0)
+			throw new NoDataException();
 		
 		//----- FINE CONTROLLI PRELIMINARI-----//
 		
@@ -185,9 +185,9 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		File<E> check = this.searchFor(Owner, file);
 		
 		if (check==null)
-			throw new NoDataException("Il file che vuoi rimuovere non esiste nel file storage!");
+			throw new NoDataException();
 		else
-			// Rimuovo il file check dall'ArrayList<File<E> proprio di Owner
+			// Rimuovo il File<E> check (che incapsula il file E passato come argomento) dall'ArrayList<File<E> proprio di Owner
 			data.get(Owner).remove(check);
 		
 		return file;
@@ -206,13 +206,13 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 			throw new NullPointerException();
 		
 		if (!security.containsKey(Owner))
-			throw new UserNotFoundException("L'utente non è registrato al file storage!");
+			throw new UserNotFoundException();
 		
 		if (!security.get(Owner).equals(passw))
-			throw new WrongPasswordException("Hai inserito una password sbagliata!");
+			throw new WrongPasswordException();
 		
-		if (data.get(Owner).size()==0)
-			throw new NoDataException("Il tuo file storage è vuoto!");
+		if (this.getSize(Owner, passw)==0)
+			throw new NoDataException();
 		
 		//-----FINE CONTROLLI PRELIMINARI-----//
 		
@@ -220,7 +220,7 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		File<E> check = this.searchFor(Owner, file);
 		
 		if (check==null)
-			throw new NoDataException("Il file che vuoi copiare non esiste nel file storage!");
+			throw new NoDataException();
 		else 
 			// Essere in questo ramo dell'if significa aver rintracciato il file E attraverso searchFor.
 			// Per copiarlo semplicemente lo inserisco di nuovo in collezione attraverso il metodo put della classe SecureFileContainer stessa
@@ -238,20 +238,20 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		
 		//-----CONTROLLI PRELIMINARI-----//
 		
-		if (Owner==null || passw==null || file==null)
+		if (Owner==null || passw==null || Other==null || file==null)
 			throw new NullPointerException();
 		
 		if (!security.containsKey(Owner))
-			throw new UserNotFoundException("L'utente non è registrato al file storage!");
+			throw new UserNotFoundException();
 		
 		if (!security.containsKey(Other))
-			throw new UserNotFoundException("L'utente con cui vuoi condividere il file in sola lettura, non è registrato al file storage!");
+			throw new UserNotFoundException();
 		
 		if (!security.get(Owner).equals(passw))
-			throw new WrongPasswordException("Hai inserito una password sbagliata!");
+			throw new WrongPasswordException();
 		
-		if (data.get(Owner).size()==0)
-			throw new NoDataException("Il tuo file storage è vuoto!");
+		if (this.getSize(Owner, passw)==0)
+			throw new NoDataException();
 		
 		//-----CONTROLLI PRELIMINARI-----//
 		
@@ -259,7 +259,7 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		File<E> check = this.searchFor(Owner, file);
 		
 		if (check==null)
-			throw new NoDataException("Il file che vuoi condividere in lettura, non esiste nel file storage!");
+			throw new NoDataException();
 		else {
 			// Il metodo setShareR è un metodo pubblico fornito da File<E>, in poche parole fa in modo che il file check si "ricordi" di essere stato condiviso in lettura
 			// all'utente Other (andare al metodo in questione per i commenti specifici sul suo funzionamento)
@@ -277,20 +277,20 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		
 		//-----CONTROLLI PRELIMINARI-----//
 		
-		if (Owner==null || passw==null || file==null)
+		if (Owner==null || passw==null || Other==null || file==null)
 			throw new NullPointerException();
 		
 		if (!security.containsKey(Owner))
-			throw new UserNotFoundException("L'utente non è registrato al file storage!");
+			throw new UserNotFoundException();
 		
 		if (!security.containsKey(Other))
-			throw new UserNotFoundException("L'utente con cui vuoi condividere il file in sola lettura, non è registrato al file storage!");
+			throw new UserNotFoundException();
 		
 		if (!security.get(Owner).equals(passw))
-			throw new WrongPasswordException("Hai inserito una password sbagliata!");
+			throw new WrongPasswordException();
 		
-		if (data.get(Owner).size()==0)
-			throw new NoDataException("Il tuo file storage è vuoto!");
+		if (this.getSize(Owner, passw)==0)
+			throw new NoDataException();
 		
 		//-----FINE CONTROLLI PRELIMINARI-----//
 		
@@ -298,7 +298,7 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		File<E> check = this.searchFor(Owner, file);
 		
 		if (check==null)
-			throw new NoDataException("Il file che vuoi condividere in scrittura, non esiste nel file storage!");
+			throw new NoDataException();
 		else {
 			// Il metodo setShareW è un metodo pubblico fornito da File<E>, in poche parole fa in modo che il file check si "ricordi" di essere stato condiviso in lettura e scrittura
 			// all'utente Other (andare al metodo in questione per i commenti specifici sul suo funzionamento)
@@ -313,7 +313,7 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 	 */
 	
 	// Restituisce un iteratore (senza remove) che genera tutti i file dell’utente in ordine arbitrario se vengono rispettati i controlli di identità
-	public Iterator<E> getIterator(String Owner, String passw) throws NullPointerException, UserNotFoundException, WrongPasswordException {
+	public Iterator<E> getIterator(String Owner, String passw) throws NullPointerException, UserNotFoundException, WrongPasswordException, NoDataException {
 		
 		//-----CONTROLLI PRELIMINARI-----//
 		
@@ -321,10 +321,13 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 			throw new NullPointerException();
 		
 		if (!security.containsKey(Owner))
-			throw new UserNotFoundException("L'utente non è registrato al file storage!");
+			throw new UserNotFoundException();
 		
 		if (!security.get(Owner).equals(passw))
-			throw new WrongPasswordException("Hai inserito una password sbagliata!");
+			throw new WrongPasswordException();
+		
+		if (this.getSize(Owner, passw)==0)
+			throw new NoDataException();
 		
 		//-----FINE CONTROLLI PRELIMINARI-----//
 		
@@ -371,5 +374,4 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 	/*
 	 * Questo metodo preserva banalmente l'IR visto che è semplicemente un'osservatore
 	 */
-
 }
