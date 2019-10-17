@@ -125,6 +125,4 @@ public class MyFile<E> implements File<E> {
 	/*
 	 * Questo metodo preserva banalmente l'IR visto che è semplicemente un'osservatore
 	 */
-
-
 }
