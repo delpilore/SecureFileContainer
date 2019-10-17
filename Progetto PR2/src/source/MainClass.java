@@ -1,6 +1,7 @@
-package source;
+package source; 
 
 import java.util.Iterator;
+import java.util.Scanner;
 
 import source.SecureFileContainer.IllegalUsernameException;
 import source.SecureFileContainer.NoDataException;
@@ -9,215 +10,277 @@ import source.SecureFileContainer.UserNotFoundException;
 import source.SecureFileContainer.WeakPasswordException;
 import source.SecureFileContainer.WrongPasswordException;
 
+//AUTHOR: Lorenzo Del Prete, Corso B, 531417
+
 public class MainClass {
+    public static void main(String[] argv) {
+        Scanner in = new Scanner(System.in);
+        String c;
+        SecureFileContainer<String> dropbox = null;
+        
+        
+        System.out.print("Scegliere l'implementazione desiderata per il testing::\n\t1\tImplementazione1 con HashMap\n\t2\tImplementazione2 con ArrayList\n\t");
+        c = in.next();
+        while (!"1".equals(c) && !"2".equals(c)) {
+            System.out.print("**Comando non valido**\n\t");
+            c = in.next();
+        }
+        
+        if (c.equals("1")) {
+            dropbox = new SecureFileContainer_Impl1<String>();
+        } else if (c.equals("2")) {
+            dropbox = new SecureFileContainer_Impl2<String>();
+        }
 
-	public static void main(String[] args){
-		
-		SecureFileContainer<String> dropbox = new SecureFileContainer_Impl1<String>();
-		int a;
-		String receive;
-	
-		try { //test createUser, getSize, put, get, remove, copy, getIterator (senza arrivo di eccezioni)
-			System.out.println("---AVVIO FILE STORAGE DROPBOX---");
-			
-			dropbox.createUser("pippo", "12345");
-			System.out.println("[USER REGISTERED] L'utente: <pippo> si è registrato!");
-			dropbox.createUser("giovanni", "12345");
-			System.out.println("[USER REGISTERED] L'utente: <giovanni> si è registrato!");
-			
-			dropbox.put("pippo", "12345", "file1");
-			System.out.println("[File Uploaded] L'utente: <pippo> ha caricato il file: <file1>");
-			a = dropbox.getSize("pippo", "12345");
-			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
-			
-			dropbox.put("pippo", "12345", "file2");
-			System.out.println("[File Uploaded] L'utente: <pippo> ha caricato il file: <file2>");
-			a = dropbox.getSize("pippo", "12345");
-			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
-			
-			dropbox.put("pippo", "12345", "file3");
-			System.out.println("[File Uploaded] L'utente: <pippo> ha caricato il file: <file3>");
-			a = dropbox.getSize("pippo", "12345");
-			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
-			
-			dropbox.put("pippo", "12345", "file4");
-			System.out.println("[File Uploaded] L'utente: <pippo> ha caricato il file: <file4>");
-			a = dropbox.getSize("pippo", "12345");
-			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
-			
-			receive = dropbox.get("pippo", "12345", "file1");
-			System.out.println("[Download] L'utente <pippo> ha scaricato una copia di " + receive);
-			a = dropbox.getSize("pippo", "12345");
-			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
-			
-			receive = dropbox.remove("pippo", "12345", "file1");
-			System.out.println("[Remove] L'utente <pippo> ha rimosso " + receive);
-			a = dropbox.getSize("pippo", "12345");
-			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
-			
-			receive = dropbox.remove("pippo", "12345", "file4");
-			System.out.println("[Remove] L'utente <pippo> ha rimosso " + receive);
-			a = dropbox.getSize("pippo", "12345");
-			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
-			
-			dropbox.copy("pippo", "12345", "file2");
-			System.out.println("[Copy] L'utente <pippo> ha copiato il file: <file2>");
-			a = dropbox.getSize("pippo", "12345");
-			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
-			
-			dropbox.copy("pippo", "12345", "file2");
-			System.out.println("[Copy] L'utente <pippo> ha copiato il file: <file2>");
-			a = dropbox.getSize("pippo", "12345");
-			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
-			
-			// a questo punto dovrei avere 3 file2 e 1 file3
-			
-			Iterator<String> it = dropbox.getIterator("pippo","12345");
-			while (it.hasNext()) {
-			  String p = it.next();
-			  System.out.println(p);
-			}
-			
-			System.out.println("*****PROVA SHARING*****");
-			
-			dropbox.put("giovanni", "12345", "file5");
-			System.out.println("[File Uploaded] L'utente: <giovanni> ha caricato il file: <file5>");
-			a = dropbox.getSize("giovanni", "12345");
-			System.out.println("[Size File Storage] L'utente <giovanni> ha " + a + " file salvati");
-			
-			dropbox.put("giovanni", "12345", "file1");
-			System.out.println("[File Uploaded] L'utente: <giovanni> ha caricato il file: <file1>");
-			a = dropbox.getSize("giovanni", "12345");
-			System.out.println("[Size File Storage] L'utente <giovanni> ha " + a + " file salvati");
-			
-			dropbox.shareW("pippo", "12345", "giovanni", "file2");
-			System.out.println("[SHARING] L'utente: <pippo> ha condiviso in scrittura il file <file2> all'utente <giovanni>");
-			a = dropbox.getSize("giovanni", "12345");
-			System.out.println("[Size File Storage] L'utente <giovanni> ha " + a + " file salvati");
-			
-			dropbox.shareR("pippo", "12345", "giovanni", "file3");
-			System.out.println("[SHARING] L'utente: <pippo> ha condiviso in lettura il file <file3> all'utente <giovanni>");
-			a = dropbox.getSize("giovanni", "12345");
-			System.out.println("[Size File Storage] L'utente <giovanni> ha " + a + " file salvati");
-			
-			dropbox.shareW("giovanni", "12345", "pippo", "file1");
-			System.out.println("[SHARING] L'utente: <giovanni> ha condiviso in scrittura il file <file1> all'utente <pippo>");
-			a = dropbox.getSize("pippo", "12345");
-			System.out.println("[Size File Storage] L'utente <pippo> ha " + a + " file salvati");
-			
-			System.out.println("*****PIPPO*****"); //pippo dovrebbe avere 3 file 2, 1 file 3, 1 file 1, in totale 5 file
-			
-			it = dropbox.getIterator("pippo","12345");
-			while (it.hasNext()) {
-			  String p = it.next();
-			  System.out.println(p);
-			}
-			 
-			System.out.println("*****GIOVANNI*****"); //giovanni dovrebbe avere 1 file 5, 1 file 1, 1 file 2 e 1 file 3
-			
-			it = dropbox.getIterator("giovanni","12345");
-			while (it.hasNext()) {
-			  String p = it.next();
-			  System.out.println(p);
-			}
-			
-			receive = dropbox.get("pippo", "12345", "file1");
-			System.out.println("[Download] L'utente <pippo> ha scaricato una copia di " + receive);
-			
-			receive = dropbox.get("pippo", "12345", "file2");
-			System.out.println("[Download] L'utente <pippo> ha scaricato una copia di " + receive);
-			
-			receive = dropbox.get("pippo", "12345", "file3");
-			System.out.println("[Download] L'utente <pippo> ha scaricato una copia di " + receive);
-			
-			receive = dropbox.get("giovanni", "12345", "file1");
-			System.out.println("[Download] L'utente <giovanni> ha scaricato una copia di " + receive);
-			
-			receive = dropbox.get("giovanni", "12345", "file2");
-			System.out.println("[Download] L'utente <giovanni> ha scaricato una copia di " + receive); // condiviso in lettura scrittura da pippo
-			
-			receive = dropbox.get("giovanni", "12345", "file3");
-			System.out.println("[Download] L'utente <giovanni> ha scaricato una copia di " + receive); // condiviso in sola lettura da pippo
-			
-			receive = dropbox.get("giovanni", "12345", "file5");
-			System.out.println("[Download] L'utente <giovanni> ha scaricato una copia di " + receive);
-			
-			System.out.println("*****PIPPO*****"); //pippo dovrebbe avere 3 file 2, 1 file 3, 1 file 1, in totale 5 file
-			
-			it = dropbox.getIterator("pippo","12345");
-			while (it.hasNext()) {
-			  String p = it.next();
-			  System.out.println(p);
-			}
-			 
-			System.out.println("*****GIOVANNI*****"); //giovanni dovrebbe avere 1 file 5, 1 file 1, 1 file 2 e 1 file 3
-			
-			it = dropbox.getIterator("giovanni","12345");
-			while (it.hasNext()) {
-			  String p = it.next();
-			  System.out.println(p);
-			}
-			
-			receive = dropbox.remove("giovanni", "12345", "file2");
-			receive = dropbox.remove("giovanni", "12345", "file3");
-			
-			System.out.println("*****PIPPO*****"); //pippo dovrebbe avere 3 file 2, 1 file 3, 1 file 1, in totale 5 file
-			
-			it = dropbox.getIterator("pippo","12345");
-			while (it.hasNext()) {
-			  String p = it.next();
-			  System.out.println(p);
-			}
-			 
-			System.out.println("*****GIOVANNI*****"); //giovanni dovrebbe avere 1 file 5, 1 file 1, 1 file 2 e 1 file 3
-			
-			it = dropbox.getIterator("giovanni","12345");
-			while (it.hasNext()) {
-			  String p = it.next();
-			  System.out.println(p);
-			}
-			
-			
+        System.out.println("Test in esecuzione con file di tipo stringa.");
 
-		} catch (NullPointerException | UserAlreadyRegisteredException | WeakPasswordException | IllegalUsernameException | UserNotFoundException | WrongPasswordException | NoDataException e) {
-			e.printStackTrace();
-		}
-		
-		
-		
-		
-	/*	
-		System.out.println("-------------------------");
-		SecureFileContainer<Number> dropbox2 = new SecureFileContainer_Impl1<Number>();
-		
-		try {
-			dropbox2.createUser("marco","12345");
-			
-			int b = dropbox2.getSize("marco", "12345");
-			System.out.println("[Size File Storage] marco ha " + b + " file salvati");
-			
-			dropbox2.put("marco", "12345", 6);
-			b = dropbox2.getSize("marco", "12345");
-			System.out.println("[Size File Storage] marco ha " + b + " file salvati");
-			
-			dropbox2.put("marco", "12345", 6);
-			b = dropbox2.getSize("marco", "12345");
-			System.out.println("[Size File Storage] marco ha " + b + " file salvati");
-			
-			Number c = dropbox2.get("marco","12345", 100);
-			System.out.println("[Download] marco ha scaricato una copia di " + c);
-			b = dropbox2.getSize("marco", "12345");
-			System.out.println("[Size File Storage] marco ha " + b + " file salvati");
-			
-		} catch (NullPointerException | UserAlreadyRegisteredException | WeakPasswordException
-				| IllegalUsernameException | UserNotFoundException | WrongPasswordException | NoDataException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	*/
-		
+        do {
+            System.out.print("Operazioni:\n"
+                    + "\tA\tRegistrazione di un utente\n"
+                    + "\tN\tNumero dei file salvati da un utente\n"
+                    + "\tI\tUpload di un file nella collezione di un utente\n"
+                    + "\tD\tDownload di un file dalla collezione di un utente\n"
+                    + "\tR\tRimozione di un file dalla collezione di un utente\n"
+                    + "\tC\tCopia di un file nella collezione di un utente\n"
+                    + "\tSw\tCondivisione di un file ad altro utente, in lettura/scrittura\n"
+                    + "\tSr\tCondivisione di un file ad un altro utente, in sola lettura\n"
+                    + "\tZ\tStampa dello stato della collezione di un utente\n"
+            		+ "\tX\tChiudi\n\t");
+            c = in.next();
+            
+            switch (c) {
+                case "A":
+                case "a":
+                    String usr, pwd;
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
+                    
+					try {
+						dropbox.createUser(usr, pwd);
+					} catch (NullPointerException e) {
+						System.out.println("ERRORE: Passati nome utente o password null");
+					} catch (UserAlreadyRegisteredException e) {
+						System.out.println("ERRORE: Utente " + usr + " già registrato!");
+					} catch (WeakPasswordException e) {
+						System.out.println("ERRORE: La password inserita è troppo corta! Inseriscine una da almeno 5 caratteri!");
+					} catch (IllegalUsernameException e) {
+						System.out.println("ERRORE: L'username è troppo corto! Inseriscine uno da almeno 2 caratteri!");
+					}
+	                
+					break;
+                
+                case "N":
+                case "n":
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
 
-	}
+					try {
+						System.out.println("Dimensione della collezione dell'utente " + usr + ": " + dropbox.getSize(usr, pwd));
+					} catch (NullPointerException e) {
+						System.out.println("ERRORE: Passati nome utente o password null");
+					} catch (UserNotFoundException e) {
+						System.out.println("ERRORE: Utente " + usr + " non trovato!");
+					} catch (WrongPasswordException e) {
+						System.out.println("ERRORE: L'utente " + usr + " risulta registrato ma la password non corrisponde!");
+					}
+	            
+                    break;
+                    
+                case "I":
+                case "i":
+                    String data;
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
+                    System.out.print("File da inserire: ");
+                    data = in.next();
 
+					try {
+						if (dropbox.put(usr, pwd, data)) {
+	                        System.out.println(data + " inserito correttamente nella collezione dell'utente " + usr);
+	                    } else {
+	                    	System.out.println(data + " NON è stato inserito nella collezione dell'utente " + usr);
+	                    }
+					} catch (NullPointerException e) {
+						System.out.println("ERRORE: Passati nome utente o password null");
+					} catch (UserNotFoundException e) {
+						System.out.println("ERRORE: Utente " + usr + " non trovato!");
+					} catch (WrongPasswordException e) {
+						System.out.println("ERRORE: L'utente " + usr + " risulta registrato ma la password non corrisponde!");
+					}
+     
+                    break;
+                
+                case "D":
+                case "d":
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
+                    System.out.print("File da scaricare: ");
+                    data = in.next();
+         
+					try {
+						System.out.println("Ottenuto " + dropbox.get(usr, pwd, data) + " dalla collezione di " + usr);
+					} catch (NullPointerException e) {
+						System.out.println("ERRORE: Passati nome utente o password null");
+					} catch (UserNotFoundException e) {
+						System.out.println("ERRORE: Utente " + usr + " non trovato!");
+					} catch (WrongPasswordException e) {
+						System.out.println("ERRORE: L'utente " + usr + " risulta registrato ma la password non corrisponde!");
+					} catch (NoDataException e) {
+						System.out.println("ERRORE: Il file " + data + " ricercato, non esiste nella collezione di " + usr);
+					}
+         
+                    break;
+                
+                case "R":
+                case "r":
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
+                    System.out.print("File da rimuovere: ");
+                    data = in.next();
+                    
+					try {
+						System.out.println("Rimosso " + dropbox.remove(usr, pwd, data) + " dalla collezione di " + usr);
+					} catch (NullPointerException e) {
+						System.out.println("ERRORE: Passati nome utente o password null");
+					} catch (UserNotFoundException e) {
+						System.out.println("ERRORE: Utente " + usr + " non trovato!");
+					} catch (WrongPasswordException e) {
+						System.out.println("ERRORE: L'utente " + usr + " risulta registrato ma la password non corrisponde!");
+					} catch (NoDataException e) {
+						System.out.println("ERRORE: Il file " + data + " da rimuovere, non esiste nella collezione di " + usr);
+					}
+
+                    break;
+                    
+                case "C":
+                case "c":
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
+                    System.out.print("Stringa da copiare: ");
+                    data = in.next();
+                    
+					try {
+						dropbox.copy(usr, pwd, data);
+					} catch (NullPointerException e) {
+						System.out.println("ERRORE: Passati nome utente o password null");
+					} catch (UserNotFoundException e) {
+						System.out.println("ERRORE: Utente " + usr + " non trovato!");
+					} catch (WrongPasswordException e) {
+						System.out.println("ERRORE: L'utente " + usr + " risulta registrato ma la password non corrisponde!");
+					} catch (NoDataException e) {
+						System.out.println("ERRORE: Il file " + data + " da copiare, non esiste nella collezione di " + usr);
+					}
+					
+                    System.out.println("Copiato " + data + " nella collezione di " + usr);
+
+                    break;
+                    
+                case "Sw":
+                case "sw":
+                    String other;
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
+                    System.out.print("File da condividere in lettura/scrittura: ");
+                    data = in.next();
+                    System.out.print("Utente a cui condividere in lettura/scrittura il file " + data + ": ");
+                    other = in.next();
+
+          
+					try {
+						dropbox.shareW(usr, pwd, other, data);
+					} catch (NullPointerException e) {
+						System.out.println("ERRORE: Passati nome utente o password null");
+					} catch (UserNotFoundException e) {
+						System.out.println("ERRORE: Utente " + usr + " o utente " + other + " non trovato!");
+					} catch (WrongPasswordException e) {
+						System.out.println("ERRORE: L'utente " + usr + " risulta registrato ma la password non corrisponde!");
+					} catch (NoDataException e) {
+						System.out.println("ERRORE: Il file " + data + " da condividere in lettura/scrittura a " + other + " non esiste nella collezione di " + usr);
+					}
+					
+                    System.out.println("Condiviso in lettura/scrittura il file " + data + " nella collezione di " + other);
+
+                    break;
+                    
+                case "Sr":
+                case "sr":
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
+                    System.out.print("File da condividere in sola lettura: ");
+                    data = in.next();
+                    System.out.print("Utente a cui condividere in sola lettura il file " + data + ": ");
+                    other = in.next();
+
+          
+					try {
+						dropbox.shareR(usr, pwd, other, data);
+					} catch (NullPointerException e) {
+						System.out.println("ERRORE: Passati nome utente o password null");
+					} catch (UserNotFoundException e) {
+						System.out.println("ERRORE: Utente " + usr + " o utente " + other + " non trovato!");
+					} catch (WrongPasswordException e) {
+						System.out.println("ERRORE: L'utente " + usr + " risulta registrato ma la password non corrisponde!");
+					} catch (NoDataException e) {
+						System.out.println("ERRORE: Il file " + data + " da condividere in sola lettura a " + other + " non esiste nella collezione di " + usr);
+					}
+					
+                    System.out.println("Condiviso in sola lettura il file " + data + " nella collezione di " + other);
+
+                    break;
+                    
+                case "Z":
+                case "z":
+                    System.out.print("Nome utente: ");
+                    usr = in.next();
+                    System.out.print("Password: ");
+                    pwd = in.next();
+                    
+					Iterator<String> i = null;
+					try {
+						i = dropbox.getIterator(usr, pwd);
+					} catch (NullPointerException e) {
+						System.out.println("ERRORE: Passati nome utente o password null");
+					} catch (UserNotFoundException e) {
+						System.out.println("ERRORE: Utente " + usr + " non trovato!");
+					} catch (WrongPasswordException e) {
+						System.out.println("ERRORE: L'utente " + usr + " risulta registrato ma la password non corrisponde!");
+					} catch (NoDataException e) {
+						System.out.println("ERRORE: " + usr + " non ha file salvati!");
+					}
+					
+					System.out.print(usr+ " ha i seguenti file salvati: ");
+					
+                    String temp;
+                    while ( i!=null &&  i.hasNext()) {
+                    	temp = i.next();
+                    	System.out.print(temp+"|");
+                    	
+                    }
+                    
+                    System.out.println("");
+    
+                    break;
+                    
+            }
+
+        } while (!"X".equals(c) && !"x".equals(c));
+    
+    in.close();
+    }
 }
