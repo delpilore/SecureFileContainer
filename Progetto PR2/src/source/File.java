@@ -31,6 +31,7 @@ public interface File<E> {
 	/*
 	 * REQUIRES: Other!=null
 	 * THROWS: Se Other==null -> NullPointerException (eccezione disponibile in Java, unchecked)
+	 * MODIFIES: this
 	 * EFFECTS: Viene aggiunto Other all'elenco <SharedW>, relativo alla quadrupla <Dato E, Owner, SharedW, SharedR>.
 	 * 			Se Other era già presente in <SharedW> NON viene inserito nuovamente nell'elenco.
 	 * 			Inoltre, se Other era presente in <SharedR>, viene rimosso da quest'ultimo.
@@ -41,6 +42,7 @@ public interface File<E> {
 	/*
 	 * REQUIRES: Other!=null
 	 * THROWS: Se Other==null -> NullPointerException (eccezione disponibile in Java, unchecked)
+	 * MODIFIES: this
 	 * EFFECTS: Viene aggiunto Other all'elenco <SharedR>, relativo alla quadrupla <Dato E, Owner, SharedW, SharedR>.
 	 * 			Se Other era già presente in <SharedR> NON viene inserito nuovamente nell'elenco.
 	 * 			Inoltre, se Other era presente in <SharedW>, viene rimosso da quest'ultimo.
