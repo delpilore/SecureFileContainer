@@ -96,7 +96,8 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * 		   Se la coppia <Owner, passw> esiste nella collezione, ma non esiste il file E da condividere in lettura -> NoDataException (eccezione non disponibile in Java, checked)
 	 * MODIFIES: this
-	 * EFFECTS: Il campo <files E> della tripla <Other, passw, <files E>> sarà arricchito dal file E condiviso da Owner, disponibile in sola lettura.
+	 * EFFECTS: Il file E, proprio di Owner, viene condiviso in sola lettura all'utente Other, inserendolo nei <files E> della tripla <Other, passw, <files E>.
+	 * 			Se ad Other era già stato condiviso questo file da Owner, viene aggiornato e non inserito nuovamente, evitando di avere condivisioni duplicate.
 	 */
 	
 	// Condivide in lettura e scrittura il file nella collezione con un altro utente se vengono rispettati i controlli di identità
@@ -108,7 +109,8 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * 		   Se la coppia <Owner, passw> esiste nella collezione, ma non esiste il file E da condividere in lettura e scrittura -> NoDataException (eccezione non disponibile in Java, checked)
 	 * MODIFIES: this
-	 * EFFECTS: Il campo <files E> della tripla <Other, passw, <files E>> sarà arricchito dal file E condiviso da Owner, disponibile in lettura e scrittura.
+	 * EFFECTS: Il file E, proprio di Owner, viene condiviso in lettura/scrittura all'utente Other, inserendolo nei <files E> della tripla <Other, passw, <files E>.
+	 * 			Se ad Other era già stato condiviso questo file da Owner, viene aggiornato e non inserito nuovamente, evitando di avere condivisioni duplicate.
 	 */
 	
 	// Restituisce un iteratore (senza remove) che genera tutti i file dell’utente in ordine arbitrario se vengono rispettati i controlli di identità
