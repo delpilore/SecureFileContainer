@@ -88,26 +88,28 @@ public interface SecureFileContainer<E> {
 	 */
 	
 	// Condivide in lettura il file nella collezione con un altro utente se vengono rispettati i controlli di identità
-	public void shareR(String Owner, String passw, String Other, E file) throws NullPointerException, UserNotFoundException, WrongPasswordException, NoDataException;
+	public void shareR(String Owner, String passw, String Other, E file) throws NullPointerException, UserNotFoundException, WrongPasswordException, NoDataException, IllegalSharingException;
 	/*
 	 * REQUIRES: Owner!=null && passw!=null && Other!=null && file!=null
 	 * THROWS: Se Owner==null || passw==null || Other==null || file==null -> NullPointerException (eccezione disponibile in Java, unchecked)
 	 * 		   Se Owner || Other non esistono nella collezione -> UserNotFoundException (eccezione non disponibile in Java, checked)
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * 		   Se la coppia <Owner, passw> esiste nella collezione, ma non esiste il file E da condividere in lettura -> NoDataException (eccezione non disponibile in Java, checked)
+	 * 		   Se Owner prova a condividere un file non di sua proprietà (che gli è stato quindi condiviso) -> IllegalSharingException (eccezione non disponibile in java, checked)
 	 * MODIFIES: this
 	 * EFFECTS: Il file E, proprio di Owner, viene condiviso in sola lettura all'utente Other, inserendolo nei <files E> della tripla <Other, passw, <files E>.
 	 * 			Se ad Other era già stato condiviso questo file da Owner, viene aggiornato e non inserito nuovamente, evitando di avere condivisioni duplicate.
 	 */
 	
 	// Condivide in lettura e scrittura il file nella collezione con un altro utente se vengono rispettati i controlli di identità
-	public void shareW(String Owner, String passw, String Other, E file) throws NullPointerException, UserNotFoundException, WrongPasswordException, NoDataException;
+	public void shareW(String Owner, String passw, String Other, E file) throws NullPointerException, UserNotFoundException, WrongPasswordException, NoDataException, IllegalSharingException;
 	/*
 	 * REQUIRES: Owner!=null && passw!=null && Other!=null && file!=null
 	 * THROWS: Se Owner==null || passw==null || Other==null || file==null -> NullPointerException (eccezione disponibile in Java, unchecked)
 	 * 		   Se Owner || Other non esistono nella collezione -> UserNotFoundException (eccezione non disponibile in Java, checked)
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * 		   Se la coppia <Owner, passw> esiste nella collezione, ma non esiste il file E da condividere in lettura e scrittura -> NoDataException (eccezione non disponibile in Java, checked)
+	 * 		   Se Owner prova a condividere un file non di sua proprietà (che gli è stato quindi condiviso) -> IllegalSharingException (eccezione non disponibile in java, checked)
 	 * MODIFIES: this
 	 * EFFECTS: Il file E, proprio di Owner, viene condiviso in lettura/scrittura all'utente Other, inserendolo nei <files E> della tripla <Other, passw, <files E>.
 	 * 			Se ad Other era già stato condiviso questo file da Owner, viene aggiornato e non inserito nuovamente, evitando di avere condivisioni duplicate.
@@ -203,6 +205,19 @@ public interface SecureFileContainer<E> {
         }
         
         public IllegalUsernameException(String s) {
+            super(s);
+        }
+    }
+	
+	@SuppressWarnings("serial")
+	// Eccezione lanciata quando si tenta di condividere un file di cui non siamo proprietari
+	class IllegalSharingException extends Exception {
+
+		public IllegalSharingException() {
+            super();
+        }
+        
+        public IllegalSharingException(String s) {
             super(s);
         }
     }

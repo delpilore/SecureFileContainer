@@ -145,7 +145,7 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 		//-----FINE CONTROLLI PRELIMINARI-----//
 		
 		// Il metodo searchFor è un metodo privato, proprio di questa classe. (scendere al metodo in questione per i commenti sul suo funzionamento)
-		File<E> check = this.searchFor(Owner, file);
+		File<E> check = this.searchFor(Owner, file, false);
 		
 		if (check==null)				
 			// Se il file non è stato trovato lancio un'eccezione
@@ -195,7 +195,7 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 		//-----FINE CONTROLLI PRELIMINARI-----//
 		
 		// Il metodo searchFor è un metodo privato, proprio di questa classe. (scendere al metodo in questione per i commenti sul suo funzionamento)
-		File<E> check = this.searchFor(Owner, file);
+		File<E> check = this.searchFor(Owner, file, false);
 		
 		if (check==null)
 			throw new NoDataException();
@@ -230,7 +230,7 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 		//-----FINE CONTROLLI PRELIMINARI-----//
 		
 		// Il metodo searchFor è un metodo privato, proprio di questa classe. (scendere al metodo in questione per i commenti sul suo funzionamento)
-		File<E> check = this.searchFor(Owner, file);
+		File<E> check = this.searchFor(Owner, file, false);
 		
 		if (check==null)
 			throw new NoDataException();
@@ -246,7 +246,7 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 	 */
 
 	// Condivide in lettura il file nella collezione con un altro utente se vengono rispettati i controlli di identità
-	public void shareR(String Owner, String passw, String Other, E file) throws NullPointerException, UserNotFoundException, WrongPasswordException, NoDataException {
+	public void shareR(String Owner, String passw, String Other, E file) throws NullPointerException, UserNotFoundException, WrongPasswordException, NoDataException, IllegalSharingException {
 		
 		//-----CONTROLLI PRELIMINARI-----//
 
@@ -268,14 +268,25 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 		//-----FINE CONTROLLI PRELIMINARI-----//
 		
 		// Il metodo searchFor è un metodo privato, proprio di questa classe. (scendere al metodo in questione per i commenti sul suo funzionamento)
-		File<E> check = this.searchFor(Owner, file);
+		File<E> check = this.searchFor(Owner, file, false);
+		
+		// Se Owner vuole inviare un file di cui non è proprietario lancio un'eccezione
+		if (check!=null && !check.getOwner().equals(Owner))
+			throw new IllegalSharingException();
 		
 		if (check==null)
 			throw new NoDataException();
 		else {
+			
+			// Se il file era già stato condiviso da Owner ad Other, lo rimuovo temporaneamente, per poi
+			// riaggiungerlo aggiornato, con il nuovo permesso d'accesso
+			if(this.searchFor(Other,file, true) != null && this.searchFor(Other,file, true).getOwner().equals(Owner))
+				data.get(security_user.indexOf(Other)).remove(check);
+			
 			// Il metodo setShareR è un metodo pubblico fornito da File<E>, in poche parole fa in modo che il file check si "ricordi" di essere stato condiviso in lettura
 			// all'utente Other (andare al metodo in questione per i commenti specifici sul suo funzionamento)
 			check.setShareR(Other);
+			
 			// Aggiungo all'ArrayList<File<E>> proprio di Other, il file check
 			data.get(security_user.indexOf(Other)).add(check);
 		}
@@ -285,7 +296,7 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 	 */
 
 	// Condivide in lettura e scrittura il file nella collezione con un altro utente se vengono rispettati i controlli di identità
-	public void shareW(String Owner, String passw, String Other, E file) throws NullPointerException, UserNotFoundException, WrongPasswordException, NoDataException {
+	public void shareW(String Owner, String passw, String Other, E file) throws NullPointerException, UserNotFoundException, WrongPasswordException, NoDataException, IllegalSharingException {
 		
 		//-----CONTROLLI PRELIMINARI-----//
 
@@ -307,14 +318,25 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 		//-----FINE CONTROLLI PRELIMINARI-----//
 		
 		// Il metodo searchFor è un metodo privato, proprio di questa classe. (scendere al metodo in questione per i commenti sul suo funzionamento)
-		File<E> check = this.searchFor(Owner, file);
+		File<E> check = this.searchFor(Owner, file, false);
+		
+		// Se Owner vuole inviare un file di cui non è proprietario lancio un'eccezione
+		if (check!=null && !check.getOwner().equals(Owner))
+			throw new IllegalSharingException();
 		
 		if (check==null)
 			throw new NoDataException();
 		else {
+			
+			// Se il file era già stato condiviso da Owner ad Other, lo rimuovo temporaneamente, per poi
+			// riaggiungerlo aggiornato, con il nuovo permesso d'accesso
+			if(this.searchFor(Other,file, true) != null && this.searchFor(Other,file, true).getOwner().equals(Owner))
+				data.get(security_user.indexOf(Other)).remove(check);
+			
 			// Il metodo setShareW è un metodo pubblico fornito da File<E>, in poche parole fa in modo che il file check si "ricordi" di essere stato condiviso in lettura e scrittura
 			// all'utente Other (andare al metodo in questione per i commenti specifici sul suo funzionamento)
 			check.setShareW(Other);
+			
 			// Aggiungo all'ArrayList<File<E>> proprio di Other, il file check
 			data.get(security_user.indexOf(Other)).add(check);
 		}
@@ -361,18 +383,31 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 	 */
 	
 	// Il compito di questo metodo è rintracciare il File<E>, che incapsula il file E originariamente ricercato (Comparison), dell'ArrayList<File<E>> (proprio di Owner)
-	// Se questo non dovesse esistere, verrà ritornato null.
-	private File<E> searchFor(String Owner, E Comparison) {
+	// Con Mode==False verrà semplicemente rintracciato il primo file uguale a quello ricercato.
+	// Con Mode==True verrà rintracciato il primo file uguale a quello ricercato, E INOLTRE, non di proprietà di Owner, quindi un file condiviso.
+	// Se il file ricercato non dovesse esistere, verrà ritornato null.
+	private File<E> searchFor(String Owner, E Comparison, Boolean Mode) {
+		
+		if(data.get(security_user.indexOf(Owner)).size()==0)
+			return null;
 
 		ArrayList<File<E>> files_temp = data.get(security_user.indexOf(Owner));	
 		
 		File<E> temp =  files_temp.get(0);		
 		int i=1;
 		
-		// getData() è un metodo pubblico fornito da File<E>, permette di ottenere il file E incapsulato in esso
-		while(!temp.getData().equals(Comparison) && i<files_temp.size()){	// Ciclo finchè non trovo il file richiesto da Owner
-			temp = files_temp.get(i);
-			i++;
+		if(!Mode) {
+			// getData() è un metodo pubblico fornito da File<E>, permette di ottenere il file E incapsulato in esso
+			while(!temp.getData().equals(Comparison) && i<files_temp.size()){	// Ciclo finchè non trovo il file richiesto da Owner
+				temp = files_temp.get(i);
+				i++;
+			}
+		}
+		else {
+			while( (!temp.getData().equals(Comparison) || temp.getOwner().equals(Owner)) && i<files_temp.size()){	// Ciclo finchè non trovo il file richiesto da Owner
+				temp = files_temp.get(i);
+				i++;
+			}
 		}
 		
 		if(temp.getData().equals(Comparison))								
