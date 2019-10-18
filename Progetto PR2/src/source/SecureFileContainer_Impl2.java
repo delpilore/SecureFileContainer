@@ -29,7 +29,7 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 	// - security_user.get(i) = pippo
 	// - security_pass.get(i) = 12345
 	// - data.get(i) = ArrayList<File<E>> (oggetto istanziato != null)
-	// Attraverso l'indice i è possibile accedere ad ogni campo che ci serve per gestire l'accesso controllato e il salvataggio dei file.
+	// Attraverso l'indice i, è possibile accedere ad ogni campo che ci serve per gestire l'accesso controllato e il salvataggio dei file, dell'utente pippo.
 	
 	// Metodo costruttore che inizializza le 3 strutture dati
 	public SecureFileContainer_Impl2() {
@@ -84,16 +84,13 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 		if (!security_user.contains(Owner))
 			throw new UserNotFoundException();
 
-		// Per il controllo della password vado a vedere se equivalgono: la password fornita come argomento
-		// e quella salvata in security_pass, all'indice che identifica, in security_user, l'username Owner
 		if (!security_pass.get(security_user.indexOf(Owner)).equals(passw))
 			throw new WrongPasswordException();
 		
 		//-----FINE CONTROLLI PRELIMINARI-----//
 		
 		// Restituisco la size() dell'ArrayList di File<E> relativo al utente Owner.
-		// Come indice per recuperare l'ArrayList in questione, utilizzo quello che indicizza
-		// l'username Owner in security_user.
+		// Per rintracciare l'indice giusto, utilizzo sempre il concetto di correlazione tra indici, accennato precedentemente.
 		return data.get(security_user.indexOf(Owner)).size();
 		
 	}
@@ -117,8 +114,7 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 		
 		//-----FINE CONTROLLI PRELIMINARI-----//
 		
-		// Aggiungo ai files di Owner, rintracciati attraverso l'indice i che indicizza Owner in security_user,
-		// l'oggetto MyFile<E> (di tipo astratto File<E>) che incapsula, tra le altre cose, l'argomento E file passato.
+		// Aggiungo ai files di Owner l'oggetto MyFile<E> (di tipo astratto File<E>) che incapsula, tra le altre cose, l'argomento E file passato.
 		data.get(security_user.indexOf(Owner)).add(new MyFile<E>(Owner, file));
 		
 		// Ritorno true ad aggiunta effettuata, non ritorno mai false perchè sempre preceduto da un'eccezione
@@ -211,7 +207,7 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 	}
 	/*
 	 * Questo metodo preserva l'IR perchè si limita a rimuovere un file da data.get(security_user.indexOf(Owner)) senza inficiare alcuna condizione posta dall'IR.
-	 * In particolare agisce su una cella dell'ArrayList padre, ma non lo porta a null, cosa che avrebbe rotto l'IR.
+	 * In particolare agisce su una cella dell'ArrayList padre, ma non porta quest'ultimo a null, cosa che avrebbe rotto l'IR.
 	 */
 
 	// Crea una copia del file nella collezione se vengono rispettati i controlli di identità
