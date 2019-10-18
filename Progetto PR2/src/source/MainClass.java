@@ -3,6 +3,7 @@ package source;
 import java.util.Iterator;
 import java.util.Scanner;
 
+import source.SecureFileContainer.IllegalSharingException;
 import source.SecureFileContainer.IllegalUsernameException;
 import source.SecureFileContainer.NoDataException;
 import source.SecureFileContainer.UserAlreadyRegisteredException;
@@ -36,16 +37,16 @@ public class MainClass {
 
         do {
             System.out.print("Operazioni:\n"
-                    + "\tA\tRegistrazione di un utente\n"
-                    + "\tN\tNumero dei file salvati da un utente\n"
-                    + "\tI\tUpload di un file nello storage di un utente\n"
-                    + "\tD\tDownload di un file dallo storage di un utente\n"
-                    + "\tR\tRimozione di un file dallo storage di un utente\n"
-                    + "\tC\tCopia di un file dallo storage di un utente\n"
-                    + "\tSw\tCondivisione di un file ad altro utente, in lettura/scrittura\n"
-                    + "\tSr\tCondivisione di un file ad un altro utente, in sola lettura\n"
-                    + "\tZ\tStampa dello stato dello storage di un utente\n"
-            		+ "\tX\tChiudi\n\t");
+                    + "\tA: Registrazione di un utente\n"
+                    + "\tN: Numero dei file salvati da un utente\n"
+                    + "\tI: Upload di un file nello storage di un utente\n"
+                    + "\tD: Download di un file dallo storage di un utente\n"
+                    + "\tR: Rimozione di un file dallo storage di un utente\n"
+                    + "\tC: Copia di un file dallo storage di un utente\n"
+                    + "\tSw: Condivisione di un file ad altro utente, in lettura/scrittura\n"
+                    + "\tSr: Condivisione di un file ad un altro utente, in sola lettura\n"
+                    + "\tZ: Stampa dello stato dello storage di un utente\n"
+            		+ "\tX: Chiudi\n\t");
             c = in.next();
             
             switch (c) {
@@ -208,6 +209,8 @@ public class MainClass {
 						System.out.println("ERRORE: L'utente " + usr + " risulta registrato ma la password non corrisponde!");
 					} catch (NoDataException e) {
 						System.out.println("ERRORE: Il file " + data + " da condividere in lettura/scrittura a " + other + " non esiste nel file storage di " + usr);
+					} catch (IllegalSharingException e) {
+						System.out.println("ERRORE: Il file " + data + " che vuoi condividere in lettura/scrittura non è di tua proprietà!");
 					}
 					
                     break;
@@ -235,6 +238,8 @@ public class MainClass {
 						System.out.println("ERRORE: L'utente " + usr + " risulta registrato ma la password non corrisponde!");
 					} catch (NoDataException e) {
 						System.out.println("ERRORE: Il file " + data + " da condividere in sola lettura a " + other + " non esiste nel file storage di " + usr);	
+					} catch (IllegalSharingException e) {
+						System.out.println("ERRORE: Il file " + data + " che vuoi condividere in sola lettura non è di tua proprietà!");
 					}
 
                     break;
