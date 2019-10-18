@@ -48,7 +48,7 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * MODIFIES: this
 	 * EFFECTS: Viene inserito il file E, nel campo <files E> della tripla <Owner, passw, <files E>>
-	 * RETURN: true quando il file E viene inserito, false altrimenti
+	 * RETURN: true quando il file E viene inserito
 	 */
 	
 	// Ottiene una copia del file nella collezione se vengono rispettati i controlli di identità
