@@ -27,23 +27,39 @@ public interface File<E> {
 	 */
 	
 	// Segna il dato E come condiviso in scrittura/lettura con Other 
-	public void setShareW(String Other) throws NullPointerException;
+	public boolean setShareW(String Other) throws NullPointerException;
 	/*
 	 * REQUIRES: Other!=null
 	 * THROWS: Se Other==null -> NullPointerException (eccezione disponibile in Java, unchecked)
-	 * EFFECTS: Viene aggiunto Other all'elenco <SharedW>, relativo alla quadrupla <Dato E, Owner, SharedW, SharedR>.
-	 * 			Se Other era già presente in <SharedW> NON viene inserito nuovamente nell'elenco.
-	 * 			Inoltre, se Other era presente in <SharedR>, viene rimosso da quest'ultimo.
+	 * MODIFIES: this
+	 * EFFECTS: Si distinguono due casi: a) this era già stato condiviso ad Other / b) this è la prima volta che viene condiviso ad Other.
+	 * 
+	 * 			a) Il primo caso si riconosce da due possibili fattori: 1) Other è già presente in <SharedW> XOR 2) Other è già presente in <SharedR>.
+	 * 				1) Non cambio nulla dello stato interno di this ed esco ritornando false.
+	 * 				2) Tolgo Other da <SharedR>, lo aggiungo a <SharedW> ed esco ritornando false.
+	 * 
+	 * 			b) Il secondo caso si riconosce dal fatto che Other non è presente ne in <SharedW> ne in <SharedR> ed è quindi la prima volta 
+	 * 			che viene condiviso ad Other. In questo caso aggiungo Other a <SharedW> e ritorno true
+	 * 
+	 * RETURN: true se this viene condiviso per la prima volta, false altrimenti
 	 */
 	
 	// Segna il dato E come condiviso in sola lettura con Other
-	public void setShareR(String Other) throws NullPointerException;
+	public boolean setShareR(String Other) throws NullPointerException;
 	/*
 	 * REQUIRES: Other!=null
 	 * THROWS: Se Other==null -> NullPointerException (eccezione disponibile in Java, unchecked)
-	 * EFFECTS: Viene aggiunto Other all'elenco <SharedR>, relativo alla quadrupla <Dato E, Owner, SharedW, SharedR>.
-	 * 			Se Other era già presente in <SharedR> NON viene inserito nuovamente nell'elenco.
-	 * 			Inoltre, se Other era presente in <SharedW>, viene rimosso da quest'ultimo.
+	 * MODIFIES: this
+	 * EFFECTS: Si distinguono due casi: a) this era già stato condiviso ad Other / b) this è la prima volta che viene condiviso ad Other.
+	 * 
+	 * 			a) Il primo caso si riconosce da due possibili fattori: 1) Other è già presente in <SharedR> XOR 2) Other è già presente in <SharedW>.
+	 * 				1) Non cambio nulla dello stato interno di this ed esco ritornando false.
+	 * 				2) Tolgo Other da <SharedW>, lo aggiungo a <SharedR> ed esco ritornando false.
+	 * 
+	 * 			b) Il secondo caso si riconosce dal fatto che Other non è presente ne in <SharedW> ne in <SharedR> ed è quindi la prima volta 
+	 * 			che viene condiviso ad Other. In questo caso aggiungo Other a <SharedR> e ritorno true
+	 * 
+	 * RETURN: true se this viene condiviso per la prima volta, false altrimenti
 	 */
 	
 	// Restituisce true se il dato E risulta condiviso in scrittura/lettura con Other, false altrimenti
