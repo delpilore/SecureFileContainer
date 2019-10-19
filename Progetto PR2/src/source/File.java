@@ -1,5 +1,7 @@
 package source;
 
+import java.util.Iterator;
+
 // AUTHOR: Lorenzo Del Prete, Corso B, 531417
 
 public interface File<E> {
@@ -63,5 +65,9 @@ public interface File<E> {
 	 * THROWS: Se Other==null -> NullPointerException (eccezione disponibile in Java, unchecked)
 	 * RETURN: true se Other è contenuto nell'elenco <SharedR> relativo alla quadrupla <Dato E, Owner, SharedW, SharedR>, false altrimenti
 	 */
+	
+	public Iterator<String> getIteratorRead();
+	
+	public Iterator<String> getIteratorWrite();
 
 }

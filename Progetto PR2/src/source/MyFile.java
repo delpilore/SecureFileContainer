@@ -1,6 +1,7 @@
 package source;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 // AUTHOR: Lorenzo Del Prete, Corso B, 531417
 
@@ -121,6 +122,24 @@ public class MyFile<E> implements File<E> {
 			return true;
 		else
 			return false;
+	}
+	/*
+	 * Questo metodo preserva banalmente l'IR visto che è semplicemente un'osservatore
+	 */
+
+	// Restituisce un iteratore sugli utenti che hanno l'accesso in lettura a this
+	public Iterator<String> getIteratorRead() {
+		Iterator<String> it = readPermissions.iterator();
+		return it;
+	}
+	/*
+	 * Questo metodo preserva banalmente l'IR visto che è semplicemente un'osservatore
+	 */
+
+	// Restituisce un iteratore sugli utenti che hanno l'accesso in lettura/scrittura a this
+	public Iterator<String> getIteratorWrite() {
+		Iterator<String> it = writePermissions.iterator();
+		return it;
 	}
 	/*
 	 * Questo metodo preserva banalmente l'IR visto che è semplicemente un'osservatore
