@@ -26,7 +26,7 @@ public interface SecureFileContainer<E> {
 	 * 		   Se passw.length < 5 -> WeakPasswordException (eccezione non disponibile in Java, checked)
 	 * 		   Se Id.length < 2 -> IllegalUsernameException (eccezione non disponibile in Java, checked)
 	 * MODIFIES: this
-	 * EFFECTS: Viene creato ed inserito nella collezione, l'elemento <Id, passw, <>>
+	 * EFFECTS: Viene creato ed inserito in this, l'elemento <Id, passw, <>>
 	 */
 	
 	// Restituisce il numero dei file di un utente presenti nella collezione
@@ -36,7 +36,7 @@ public interface SecureFileContainer<E> {
 	 * THROWS: Se Owner==null || passw==null -> NullPointerException (eccezione disponibile in Java, unchecked)
 	 * 		   Se Owner non esiste nella collezione -> UserNotFoundException (eccezione non disponibile in Java, checked)
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
-	 * RETURN: Numero dei <files E>, relativi alla tripla <Owner, passw, <files E>>
+	 * RETURN: Numero dei <files E>, relativi alla tripla <Owner, passw, <files E>> di this.
 	 */
 	
 	// Inserisce il file nella collezione se vengono rispettati i controlli di identità
@@ -47,7 +47,7 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner non esiste nella collezione -> UserNotFoundException (eccezione non disponibile in Java, checked)
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * MODIFIES: this
-	 * EFFECTS: Viene inserito il file E, nel campo <files E> della tripla <Owner, passw, <files E>>
+	 * EFFECTS: Viene inserito il file E, nel campo <files E> della tripla <Owner, passw, <files E>> di this.
 	 * RETURN: true quando il file E viene inserito
 	 */
 	
@@ -59,7 +59,7 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner non esiste nella collezione -> UserNotFoundException (eccezione non disponibile in Java, checked)
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * 		   Se la coppia <Owner,passw> esiste nella collezione, ma non esiste il file E da ottenere -> NoDataException (eccezione non disponibile in Java, checked)
-	 * RETURN: Una copia del file E, rintracciato nel campo <files E> della tripla <Owner, passw, <files E>>
+	 * RETURN: Una copia del file E, rintracciato nel campo <files E> della tripla <Owner, passw, <files E>> di this
 	 */
 	
 	// Rimuove il file dalla collezione se vengono rispettati i controlli di identità
@@ -71,7 +71,10 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * 		   Se la coppia <Owner,passw> esiste nella collezione, ma non esiste il file E da rimuovere -> NoDataException (eccezione non disponibile in Java, checked)
 	 * MODIFIES: this
-	 * EFFECTS: Viene rimosso il file E, dal campo <files E> della tripla <Owner, passw, <files E>>
+	 * EFFECTS: Se il file E non è di proprietà di Owner, (ed è quindi stato condiviso a quest'ultimo) viene semplicemente rimosso dal campo <files E> 
+	 * 			della tripla <Owner, passw, <files E>> di this.
+	 * 			Se, al contrario, il file E è di proprietà di Owner, viene eliminato anche a tutti gli altri eventuali utenti che lo hanno 
+	 * 			ricevuto in condivisione, sia in sola lettura che in lettura/scrittura.
 	 * RETURN: Il file che è stato rimosso
 	 */
 	
@@ -84,7 +87,7 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * 		   Se la coppia <Owner,passw> esiste nella collezione, ma non esiste il file E da copiare -> NoDataException (eccezione non disponibile in Java, checked)
 	 * MODIFIES: this
-	 * EFFECTS: Viene inserito un duplicato del file E, nel campo <files E> della tripla <Owner, passw, <files E>>
+	 * EFFECTS: Viene inserito un duplicato del file E, nel campo <files E> della tripla <Owner, passw, <files E>> di this.
 	 */
 	
 	// Condivide in lettura il file nella collezione con un altro utente se vengono rispettati i controlli di identità
@@ -95,9 +98,9 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner || Other non esistono nella collezione -> UserNotFoundException (eccezione non disponibile in Java, checked)
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * 		   Se la coppia <Owner, passw> esiste nella collezione, ma non esiste il file E da condividere in lettura -> NoDataException (eccezione non disponibile in Java, checked)
-	 * 		   Se Owner prova a condividere un file non di sua proprietà (che gli è stato quindi condiviso) -> IllegalSharingException (eccezione non disponibile in java, checked)
+	 * 		   Se Owner prova a condividere un file non di sua proprietà (che gli è stato quindi condiviso) o prova a condividere un file a se stesso -> IllegalSharingException (eccezione non disponibile in java, checked)
 	 * MODIFIES: this
-	 * EFFECTS: Il file E, proprio di Owner, viene condiviso in sola lettura all'utente Other, inserendolo nei <files E> della tripla <Other, passw, <files E>.
+	 * EFFECTS: Il file E, proprio di Owner, viene condiviso in sola lettura all'utente Other, inserendolo nei <files E> della tripla <Other, passw, <files E>> di this.
 	 * 			Se ad Other era già stato condiviso questo file da Owner, viene aggiornato e non inserito nuovamente, evitando di avere condivisioni duplicate.
 	 */
 	
@@ -109,9 +112,9 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner || Other non esistono nella collezione -> UserNotFoundException (eccezione non disponibile in Java, checked)
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * 		   Se la coppia <Owner, passw> esiste nella collezione, ma non esiste il file E da condividere in lettura e scrittura -> NoDataException (eccezione non disponibile in Java, checked)
-	 * 		   Se Owner prova a condividere un file non di sua proprietà (che gli è stato quindi condiviso) -> IllegalSharingException (eccezione non disponibile in java, checked)
+	 * 		   Se Owner prova a condividere un file non di sua proprietà (che gli è stato quindi condiviso) o prova a condividere un file a se stesso -> IllegalSharingException (eccezione non disponibile in java, checked)
 	 * MODIFIES: this
-	 * EFFECTS: Il file E, proprio di Owner, viene condiviso in lettura/scrittura all'utente Other, inserendolo nei <files E> della tripla <Other, passw, <files E>.
+	 * EFFECTS: Il file E, proprio di Owner, viene condiviso in lettura/scrittura all'utente Other, inserendolo nei <files E> della tripla <Other, passw, <files E>> di this.
 	 * 			Se ad Other era già stato condiviso questo file da Owner, viene aggiornato e non inserito nuovamente, evitando di avere condivisioni duplicate.
 	 */
 	
@@ -123,9 +126,8 @@ public interface SecureFileContainer<E> {
 	 * 		   Se Owner non esiste nella collezione -> UserNotFoundException (eccezione non disponibile in Java, checked)
 	 * 		   Se Owner esiste nella collezione ma passw non corrisponde -> WrongPasswordException (eccezione non disponibile in Java, checked)
 	 * 		   Se la coppia <Owner, passw> esiste nella collezione, ma l'insieme <files E> relativo è vuoto -> NoDataException  (eccezione non disponibile in Java, checked)
-	 * RETURN: Iteratore sui <files E> relativi alla tripla <Owner, passw, <files E>>
+	 * RETURN: Iteratore sui <files E> relativi alla tripla <Owner, passw, <files E>> di this.
 	 */
-	
 	
 	/*
 	 * MY CHECKED EXCEPTIONS

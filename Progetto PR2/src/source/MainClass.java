@@ -148,7 +148,7 @@ public class MainClass {
                     data = in.next();
                     
 					try {
-						System.out.println("Rimosso " + dropbox.remove(usr, pass, data) + " dallo storage di " + usr);
+						System.out.println("Rimosso " + dropbox.remove(usr, pass, data) + " dallo storage di " + usr + " e da quello di tutti gli utenti a cui era stato eventualmente condiviso!");
 					} catch (NullPointerException e) {
 						System.out.println("ERRORE: Passati nome utente, password o file, null");
 					} catch (UserNotFoundException e) {
@@ -210,7 +210,7 @@ public class MainClass {
 					} catch (NoDataException e) {
 						System.out.println("ERRORE: Il file " + data + " da condividere in lettura/scrittura a " + other + " non esiste nel file storage di " + usr);
 					} catch (IllegalSharingException e) {
-						System.out.println("ERRORE: Il file " + data + " che vuoi condividere in lettura/scrittura non è di tua proprietà!");
+						System.out.println("ERRORE: Condivisione non valida! Stai tentando di condividere un file a te stesso, o un file non di tua proprietà!");
 					}
 					
                     break;
@@ -239,7 +239,7 @@ public class MainClass {
 					} catch (NoDataException e) {
 						System.out.println("ERRORE: Il file " + data + " da condividere in sola lettura a " + other + " non esiste nel file storage di " + usr);	
 					} catch (IllegalSharingException e) {
-						System.out.println("ERRORE: Il file " + data + " che vuoi condividere in sola lettura non è di tua proprietà!");
+						System.out.println("ERRORE: Condivisione non valida! Stai tentando di condividere un file a te stesso, o un file non di tua proprietà!");
 					}
 
                     break;
@@ -259,7 +259,7 @@ public class MainClass {
 	                    String temp;
 	                    while ( i!=null &&  i.hasNext()) {
 	                    	temp = i.next();
-	                    	System.out.println("-" + temp);
+	                    	System.out.println("- " + temp);
 	                    }
 					} catch (NullPointerException e) {
 						System.out.println("ERRORE: Passati nome utente o password null");

@@ -51,6 +51,24 @@ public class MyFile<E> implements File<E> {
 	/*
 	 * Questo metodo preserva banalmente l'IR visto che è semplicemente un'osservatore
 	 */
+	
+	// Restituisce un iteratore che genera tutti gli utenti che hanno accesso a this in sola lettura
+	public Iterator<String> getIteratorRead() {
+		Iterator<String> it = readPermissions.iterator();
+		return it;
+	}
+	/*
+	 * Questo metodo preserva banalmente l'IR visto che è semplicemente un'osservatore
+	 */
+
+	// Restituisce un iteratore che genera tutti gli utenti che hanno accesso a this in lettura/scrittura
+	public Iterator<String> getIteratorWrite() {
+		Iterator<String> it = writePermissions.iterator();
+		return it;
+	}
+	/*
+	 * Questo metodo preserva banalmente l'IR visto che è semplicemente un'osservatore
+	 */
 
 	// Segna il dato E come condiviso in scrittura/lettura con Other 
 	public void setShareW(String Other) throws NullPointerException {
@@ -111,7 +129,6 @@ public class MyFile<E> implements File<E> {
 	 * Questo metodo preserva banalmente l'IR visto che è semplicemente un'osservatore
 	 */
 
-	
 	// Restituisce true se il dato E risulta condiviso in sola lettura con Other, false altrimenti
 	public boolean isSharedR(String Other) throws NullPointerException {
 		
@@ -122,24 +139,6 @@ public class MyFile<E> implements File<E> {
 			return true;
 		else
 			return false;
-	}
-	/*
-	 * Questo metodo preserva banalmente l'IR visto che è semplicemente un'osservatore
-	 */
-
-	// Restituisce un iteratore sugli utenti che hanno l'accesso in lettura a this
-	public Iterator<String> getIteratorRead() {
-		Iterator<String> it = readPermissions.iterator();
-		return it;
-	}
-	/*
-	 * Questo metodo preserva banalmente l'IR visto che è semplicemente un'osservatore
-	 */
-
-	// Restituisce un iteratore sugli utenti che hanno l'accesso in lettura/scrittura a this
-	public Iterator<String> getIteratorWrite() {
-		Iterator<String> it = writePermissions.iterator();
-		return it;
 	}
 	/*
 	 * Questo metodo preserva banalmente l'IR visto che è semplicemente un'osservatore

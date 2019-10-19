@@ -201,36 +201,37 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 			throw new NoDataException();
 		else{
 			
-			if (!check.getOwner().equals(Owner)) // sto cercando di eliminare un file che mi è stato condiviso e che non è quindi di mia proprietà
-				data.get(security_user.indexOf(Owner)).remove(check); // lo rimuovo semplicemente
+			if (!check.getOwner().equals(Owner)) // Sto cercando di eliminare un file che mi è stato condiviso e che non è quindi di mia proprietà
+				data.get(security_user.indexOf(Owner)).remove(check); // Lo rimuovo semplicemente
 			else {
 				// Se sto invece cercando di rimuovere un file di mia proprietà, lo rimuovo anche a coloro a cui l'avevo condiviso
 				File<E> shareremove;
-				String temp;
+				String shareuser;
 				
-				Iterator<String> it = check.getIteratorRead();
+				Iterator<String> it = check.getIteratorRead(); 									// Ottengo un iteratore sugli utenti che hanno accesso in sola lettura a check
 				while (it.hasNext()) {
-					temp = it.next();
-					shareremove = this.searchFor(temp, file, Owner);
-					if(shareremove!=null)
-						data.get(security_user.indexOf(temp)).remove(shareremove);
+					shareuser = it.next();
+					shareremove = this.searchFor(shareuser, file, Owner);						// Cerco tra i files di shareuser (utente a cui è stato condiviso check in sola lettura) un file 
+																	 							// uguale al file che sto rimuovendo e di proprietà di Owner.
+					if(shareremove!=null)		
+						data.get(security_user.indexOf(shareuser)).remove(shareremove);			// Se lo trovo, lo rimuovo
 				}
 				
-				it = check.getIteratorWrite();
+				it = check.getIteratorWrite();													// Ottengo un iteratore sugli utenti che hanno accesso in lettura/scrittura a check
 				while (it.hasNext()) {
-					temp = it.next();
-					shareremove = this.searchFor(temp, file, Owner);
+					shareuser = it.next();
+					shareremove = this.searchFor(shareuser, file, Owner); 						// Cerco tra i files di shareuser (utente a cui è stato condiviso check in lettura/scrittura) un file 
+					 												 							// uguale al file che sto rimuovendo e di proprietà di Owner.
 					if(shareremove!=null)
-						data.get(security_user.indexOf(temp)).remove(shareremove);
+						data.get(security_user.indexOf(shareuser)).remove(shareremove);			// Se lo trovo, lo rimuovo
 				}
 			}
 		}
-		
 		return file;
 	}
 	/*
-	 * Questo metodo preserva l'IR perchè si limita a rimuovere un file da data.get(security_user.indexOf(Owner)) senza inficiare alcuna condizione posta dall'IR.
-	 * In particolare agisce su una cella dell'ArrayList padre, ma non porta quest'ultimo a null, cosa che avrebbe rotto l'IR.
+	 * Questo metodo preserva l'IR perchè si limita a rimuovere dei file da delle collezioni di utenti senza inficiare alcuna condizione posta dall'IR. (non porta nessuna struttura dati
+	 * a null e non spezza la condizione di non duplicità)
 	 */
 
 	// Crea una copia del file nella collezione se vengono rispettati i controlli di identità
@@ -288,6 +289,9 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 		if (this.getSize(Owner, passw)==0)
 			throw new NoDataException();
 		
+		if (Other.equals(Owner))
+			throw new IllegalSharingException();
+		
 		//-----FINE CONTROLLI PRELIMINARI-----//
 		
 		// Il metodo searchFor è un metodo privato, proprio di questa classe. (scendere al metodo in questione per i commenti sul suo funzionamento)
@@ -337,6 +341,9 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 		
 		if (this.getSize(Owner, passw)==0)
 			throw new NoDataException();
+		
+		if (Other.equals(Owner))
+			throw new IllegalSharingException();
 		
 		//-----FINE CONTROLLI PRELIMINARI-----//
 		
@@ -405,40 +412,45 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 	 * Questo metodo preserva banalmente l'IR visto che è semplicemente un'osservatore
 	 */
 	
-	// Il compito di questo metodo è rintracciare il File<E>, che incapsula il file E originariamente ricercato (Comparison), dell'ArrayList<File<E>> (proprio di Owner)
-	// Con Mode==False verrà semplicemente rintracciato il primo file uguale a quello ricercato.
-	// Con Mode==True verrà rintracciato il primo file uguale a quello ricercato, E INOLTRE, non di proprietà di Owner, quindi un file condiviso.
+	// Il compito di questo metodo è rintracciare file, tra i files di Owner. (verrà ritornato il File<E> che lo incapsula e non file direttamente)
+	// Con realOwner==null verrà semplicemente rintracciato il primo file uguale a quello ricercato.
+	// Con realOwner!=null verrà rintracciato il primo file uguale a quello ricercato, E INOLTRE, di proprietà di realOwner, quindi un file CONDIVISO SPECIFICO.
 	// Se il file ricercato non dovesse esistere, verrà ritornato null.
-	private File<E> searchFor(String Owner, E Comparison, String realOwner) {
+	private File<E> searchFor(String Owner, E file, String realOwner) {
 		
+		// Se Owner non ha alcun file salvato è inutile che continui la ricerca e ritorno direttamente null
 		if(data.get(security_user.indexOf(Owner)).size()==0)
 			return null;
 
+		// Preparo un arraylist temporaneo dove ciclare per cercare il file 
 		ArrayList<File<E>> files_temp = data.get(security_user.indexOf(Owner));	
 		
+		// Estraggo il primo file contenuto
 		File<E> temp =  files_temp.get(0);		
 		int i=1;
 		
 		if(realOwner == null) {
-			// getData() è un metodo pubblico fornito da File<E>, permette di ottenere il file E incapsulato in esso
-			while(!temp.getData().equals(Comparison) && i<files_temp.size()){	// Ciclo finchè non trovo il file richiesto da Owner
+			// Ciclo fino a che non trovo il primo file uguale a quello ricercato
+			while(!temp.getData().equals(file) && i<files_temp.size()){	
 				temp = files_temp.get(i);
 				i++;
 			}
 			
-			if(temp.getData().equals(Comparison))								
-				// Ritorno il File<E> che incapsula E Comparison, ovvero il file ricercato
+			if(temp.getData().equals(file))								
+				// Ritorno il File<E> che incapsula il file ricercato 
 				return temp;
 			else
 				return null;
 		}
 		else {
-			while( (!temp.getData().equals(Comparison) || !temp.getOwner().equals(realOwner)) && i<files_temp.size()){	
+			// Ciclo fino a che non trovo il primo file uguale a quello ricercato, E INOLTRE, di proprietà di realOwner
+			while( (!temp.getData().equals(file) || !temp.getOwner().equals(realOwner)) && i<files_temp.size()){	
 				temp = files_temp.get(i);
 				i++;
 			}
 			
-			if(temp.getData().equals(Comparison) && temp.getOwner().equals(realOwner))
+			if(temp.getData().equals(file) && temp.getOwner().equals(realOwner))
+				// Ritorno il File<E> che incapsula il file ricercato, di proprietà di realOwner
 				return temp;
 			else
 				return null;
