@@ -391,7 +391,7 @@ public class MainClass {
         	// Fatti questi test di iscrizioni dovrebbero risultare 3 iscritti (pippo, pluto e topolino) e 4 errori
         	
         	System.out.println("");
-        	System.out.println("ASSERZIONE: da questo test dovrebbero risultare 3 utenti iscritti correttamente e 4 errori");
+        	System.out.println("***ASSERZIONE: da questo test dovrebbero risultare 3 utenti iscritti correttamente e 4 errori");
         	System.out.println("");
         	System.out.println("-----------------------------------------------------------------");
         	System.out.println("");
@@ -449,7 +449,7 @@ public class MainClass {
 			}
 			
         	System.out.println("");
-        	System.out.println("ASSERZIONE: da questo test dovrebbe risultare dimensione 0 per i 3 utenti iscritti (pippo, pluto, topolino) e due errori");
+        	System.out.println("***ASSERZIONE: da questo test dovrebbe risultare dimensione 0 per i 3 utenti iscritti (pippo, pluto, topolino) e due errori");
         	System.out.println("");
         	System.out.println("-----------------------------------------------------------------");
         	System.out.println("");
@@ -524,7 +524,7 @@ public class MainClass {
 			}
 			
         	System.out.println("");
-        	System.out.println("ASSERZIONE: da questo test dovrebbero risultare: 1 inserimento per pippo (FILE1), 2 per pluto (FILE2 e FILE3) , 1 per topolino (FILE1) e 2 errori");
+        	System.out.println("***ASSERZIONE: da questo test dovrebbero risultare: 1 inserimento per pippo (FILE1), 2 per pluto (FILE2 e FILE3) , 1 per topolino (FILE1) e 2 errori");
         	System.out.println("- pippo a questo punto dovrebbe avere 1 file: FILE1");
         	System.out.println("- pluto a questo punto dovrebbe avere 2 file: FILE2, FILE3");
         	System.out.println("- topolino a questo punto dovrebbe avere 1 file: FILE1");
@@ -612,7 +612,7 @@ public class MainClass {
 			}
 			
         	System.out.println("");
-        	System.out.println("ASSERZIONE: da questo test dovrebbe trasparire che il sistema risulta consistente con quanto fatto con la put precedentemente");
+        	System.out.println("***ASSERZIONE: da questo test dovrebbe trasparire che il sistema risulta consistente con quanto fatto con la put precedentemente");
         	System.out.println("");
         	System.out.println("-----------------------------------------------------------------");
         	System.out.println("");
@@ -662,7 +662,7 @@ public class MainClass {
 			}
 			
         	System.out.println("");
-        	System.out.println("ASSERZIONE: da questo test dovrebbero risultare: 1 file copiato per pippo (FILE1), 1 file copiato per pluto (FILE2) , 1 file copiato per topolino (FILE1) e 1 errore");
+        	System.out.println("***ASSERZIONE: da questo test dovrebbero risultare: 1 file copiato per pippo (FILE1), 1 file copiato per pluto (FILE2) , 1 file copiato per topolino (FILE1) e 1 errore");
         	System.out.println("- pippo a questo punto dovrebbe avere 2 file: FILE1, FILE1");
         	System.out.println("- pluto a questo punto dovrebbe avere 3 file: FILE2, FILE3, FILE2");
         	System.out.println("- topolino a questo punto dovrebbe avere 2 file: FILE1, FILE1");
@@ -749,7 +749,7 @@ public class MainClass {
 			}
 			
 			System.out.println("");
-        	System.out.println("ASSERZIONE: da questo test dovrebbe trasparire che il sistema risulta consistente con quanto fatto con la copy precedentemente");
+        	System.out.println("***ASSERZIONE: da questo test dovrebbe trasparire che il sistema risulta consistente con quanto fatto con la copy precedentemente");
         	System.out.println("");
         	System.out.println("-----------------------------------------------------------------");
         	System.out.println("");
@@ -813,7 +813,7 @@ public class MainClass {
 			}
 			
         	System.out.println("");
-        	System.out.println("ASSERZIONE: da questo test dovrebbero risultare: 2 file rimossi per pippo (FILE1 e FILE1), 1 file rimosso per pluto (FILE3) , 0 rimossi per topolino e 2 errori");
+        	System.out.println("***ASSERZIONE: da questo test dovrebbero risultare: 2 file rimossi per pippo (FILE1 e FILE1), 1 file rimosso per pluto (FILE3) , 0 rimossi per topolino e 2 errori");
         	System.out.println("- pippo a questo punto dovrebbe avere 0 file");
         	System.out.println("- pluto a questo punto dovrebbe avere 2 file: FILE2, FILE2");
         	System.out.println("- topolino a questo punto dovrebbe avere 2 file: FILE1, FILE1");
@@ -913,7 +913,7 @@ public class MainClass {
 			}
 			
 			System.out.println("");
-        	System.out.println("ASSERZIONE: da questo test dovrebbe trasparire che il sistema risulta consistente con quanto fatto con la remove precedentemente");
+        	System.out.println("***ASSERZIONE: da questo test dovrebbe trasparire che il sistema risulta consistente con quanto fatto con la remove precedentemente");
         	System.out.println("");
         	System.out.println("-----------------------------------------------------------------");
         	System.out.println("");
@@ -959,10 +959,10 @@ public class MainClass {
 			}
 			
         	System.out.println("");
-        	System.out.println("ASSERZIONE: da questo test dovrebbero risultare: 1 file condiviso a pippo da pluto (FILE2), 1 file condiviso a topolino da pluto (FILE2) e 1 errore per tentata condivisione di un file non di proprietà");
+        	System.out.println("***ASSERZIONE: da questo test dovrebbero risultare: 1 file condiviso a pippo da pluto (FILE2), 1 file condiviso a topolino da pluto (FILE2) e 1 errore per tentata condivisione di un file non di proprietà");
         	System.out.println("- pippo a questo punto dovrebbe avere 1 file: FILE2 (condiviso da pluto in lettura/scrittura");
         	System.out.println("- pluto a questo punto dovrebbe avere 2 file: FILE2, FILE2");
-        	System.out.println("- topolino a questo punto dovrebbe avere 3 file: FILE1, FILE1. FILE2 (condiviso da pluto in lettura/scrittura)");
+        	System.out.println("- topolino a questo punto dovrebbe avere 3 file: FILE1, FILE1, FILE2 (condiviso da pluto in lettura/scrittura)");
         	System.out.println("");
         	System.out.println("-----------------------------------------------------------------");
         	System.out.println("");
@@ -1071,7 +1071,7 @@ public class MainClass {
 			}
 			
 			System.out.println("");
-        	System.out.println("ASSERZIONE: da questo test dovrebbe trasparire che il sistema risulta consistente con quanto fatto con la shareW precedentemente");
+        	System.out.println("***ASSERZIONE: da questo test dovrebbe trasparire che il sistema risulta consistente con quanto fatto con la shareW precedentemente");
         	System.out.println("");
         	System.out.println("-----------------------------------------------------------------");
         	System.out.println("");
@@ -1087,25 +1087,26 @@ public class MainClass {
         	other = "pippo";
         	data = "FILE2";
 			try {
-				System.out.println("Provo a condividere il file " + data + " dal file storage di " + usr + " con password " + psw + " al file storage di " + other + " in lettura/scrittura");
+				System.out.println("Provo a condividere il file " + data + " dal file storage di " + usr + " con password " + psw + " al file storage di " + other + " in sola lettura");
 				dropbox.shareR(usr, psw, other, data);
-				System.out.println("[SHARED_W] Condiviso in lettura/scrittura il file " + data + " nel file storage di " + other);
+				System.out.println("[SHARED_R] Condiviso in sola lettura il file " + data + " nel file storage di " + other);
 				
 				System.out.println("");
 				
 	        	other = "topolino";
-				System.out.println("Provo a condividere il file " + data + " dal file storage di " + usr + " con password " + psw + " al file storage di " + other + " in lettura/scrittura");
+				System.out.println("Provo a condividere il file " + data + " dal file storage di " + usr + " con password " + psw + " al file storage di " + other + " in sola lettura");
 				dropbox.shareR(usr, psw, other, data);
-				System.out.println("[SHARED_W] Condiviso in lettura/scrittura il file " + data + " nel file storage di " + other);
+				System.out.println("[SHARED_R] Condiviso in sola lettura il file " + data + " nel file storage di " + other);
 				
 				System.out.println("");
 				
 				usr ="pippo";
 				data = "FILE2";
 				other = "topolino";
-				System.out.println("Provo a condividere il file " + data + " dal file storage di " + usr + " con password " + psw + " al file storage di " + other + " in lettura/scrittura");
+				System.out.println("Provo a condividere il file " + data + " dal file storage di " + usr + " con password " + psw + " al file storage di " + other + " in sola lettura");
 				dropbox.shareR(usr, psw, other, data);
-				System.out.println("[SHARED_W] Condiviso in lettura/scrittura il file " + data + " nel file storage di " + other);
+				System.out.println("[SHARED_R] Condiviso in sola lettura il file " + data + " nel file storage di " + other);
+				
 			} catch (NullPointerException e) {
 				System.out.println("[ERRORE]: Passati nomi utente, password o file, null");
 			} catch (UserNotFoundException e) {
@@ -1119,10 +1120,10 @@ public class MainClass {
 			}
 			
         	System.out.println("");
-        	System.out.println("ASSERZIONE: da questo test dovrebbero risultare inalterati i files posseduti dagli utenti iscritti, SOLO AGGIORNATI I PERMESSI D'ACCESSO, + 1 errore per tentata condivisione di un file non di proprietà");
-        	System.out.println("- pippo a questo punto dovrebbe avere 1 file: FILE2 (condiviso da pluto in LETTURA -> PERMESSO AGGIORNATO RISPETTO ALL'OPERAZIONE DI SHAREW PRECEDENTE");
+        	System.out.println("***ASSERZIONE: da questo test dovrebbero risultare inalterati i files posseduti dagli utenti iscritti, VENGONO SOLO AGGIORNATI I PERMESSI D'ACCESSO, + 1 errore per tentata condivisione di un file non di proprietà");
+        	System.out.println("- pippo a questo punto dovrebbe avere 1 file: FILE2 (condiviso da pluto in SOLA LETTURA -> PERMESSO AGGIORNATO RISPETTO ALL'OPERAZIONE DI SHAREW PRECEDENTE)");
         	System.out.println("- pluto a questo punto dovrebbe avere 2 file: FILE2, FILE2");
-        	System.out.println("- topolino a questo punto dovrebbe avere 3 file: FILE1, FILE1. FILE2 (condiviso da pluto in LETTURA -> PERMESSO AGGIORNATO RISPETTO ALL'OPERAZIONE DI SHAREW PRECEDENTE)");
+        	System.out.println("- topolino a questo punto dovrebbe avere 3 file: FILE1, FILE1, FILE2 (condiviso da pluto in SOLA LETTURA -> PERMESSO AGGIORNATO RISPETTO ALL'OPERAZIONE DI SHAREW PRECEDENTE)");
         	System.out.println("");
         	System.out.println("-----------------------------------------------------------------");
         	System.out.println("");
@@ -1157,7 +1158,7 @@ public class MainClass {
         	
         	System.out.println("");
         	
-        	usr = "topolino";
+        	usr = "pippo";
         	psw = "12345";
         	i = null;
         	
@@ -1231,7 +1232,7 @@ public class MainClass {
 			}
 			
 			System.out.println("");
-        	System.out.println("ASSERZIONE: da questo test dovrebbe trasparire che il sistema risulta consistente con quanto fatto con la shareR precedentemente");
+        	System.out.println("***ASSERZIONE: da questo test dovrebbe trasparire che il sistema risulta consistente con quanto fatto con la shareR precedentemente");
         	System.out.println("");
         	System.out.println("-----------------------------------------------------------------");
         	System.out.println("");
@@ -1262,7 +1263,7 @@ public class MainClass {
 			}
 			
         	System.out.println("");
-        	System.out.println("ASSERZIONE: visto che pluto ha eliminato entrambi i suoi FILE2 e uno dei due l'aveva condiviso a pippo e topolino, ora questi ultimi non se lo troveranno più nel loro file storage");
+        	System.out.println("***ASSERZIONE: visto che pluto ha eliminato entrambi i suoi FILE2 e uno dei due l'aveva condiviso a pippo e topolino, ora questi ultimi non se lo troveranno più nel loro file storage");
         	System.out.println("- pippo a questo punto dovrebbe avere 0 file");
         	System.out.println("- pluto a questo punto dovrebbe avere 0 file");
         	System.out.println("- topolino a questo punto dovrebbe avere 2 file: FILE1, FILE1");

@@ -47,7 +47,7 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 		//-----CONTROLLI PRELIMINARI-----//
 		
 		if (Id==null || passw==null)
-			throw new NullPointerException();
+			throw new NullPointerException(); 
 		
 		if (security_user.contains(Id))
 			throw new UserAlreadyRegisteredException();

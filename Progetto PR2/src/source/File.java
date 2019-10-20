@@ -77,5 +77,4 @@ public interface File<E> {
 	 * THROWS: Se Other==null -> NullPointerException (eccezione disponibile in Java, unchecked)
 	 * RETURN: true se Other è contenuto nell'elenco <SharedR> di this, false altrimenti
 	 */
-
 }
