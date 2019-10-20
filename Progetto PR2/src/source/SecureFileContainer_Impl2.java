@@ -159,13 +159,13 @@ public class SecureFileContainer_Impl2<E> implements SecureFileContainer<E> {
 				// Controllo i permessi d'accesso forniti ad Owner dal vero proprietario con isSharedR che è un metodo pubblico fornito da File<E>
 				// Esso controlla se il nome di Owner è presente tra i nomi di utenti che hanno l'accesso in lettura al file in questione
 				if(check.isSharedR(Owner))					
-					System.out.println("[Download] Il file: <" + file + "> che " + Owner + " sta per scaricare, è stato condiviso da " + check.getOwner() + " in sola lettura!");
+					System.out.println("[DOWNLOAD] Il file: <" + file + "> che " + Owner + " sta per scaricare, è stato condiviso da " + check.getOwner() + " in sola lettura!");
 				else
-					System.out.println("[Download] Il file: <" + file + "> che " + Owner + " sta per scaricare, è stato condiviso da " + check.getOwner() + " in lettura e scrittura!");
+					System.out.println("[DOWNLOAD] Il file: <" + file + "> che " + Owner + " sta per scaricare, è stato condiviso da " + check.getOwner() + " in lettura e scrittura!");
 			}
 			else 					
 				// Owner è il proprietario legittimo e quindi può accedere sia in scrittura che lettura al file che sta scaricando
-				System.out.println("[Download] Il file: <" + file + "> che stai per scaricare, è di tua proprietà, con accesso in scrittura e lettura");
+				System.out.println("[DOWNLOAD] Il file: <" + file + "> che stai per scaricare, è di tua proprietà, con accesso in scrittura e lettura");
 			
 			// Ritorno il file E
 			return check.getData();
