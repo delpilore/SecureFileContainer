@@ -277,6 +277,7 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		if (this.getSize(Owner, passw)==0)
 			throw new NoDataException();
 		
+		// Se Owner vuole condividere un file a se stesso
 		if (Other.equals(Owner))
 			throw new IllegalSharingException();
 		
@@ -285,25 +286,22 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		// Il metodo searchFor è un metodo privato, proprio di questa classe. (scendere al metodo in questione per i commenti sul suo funzionamento)
 		File<E> check = this.searchFor(Owner, file, null);
 		
-		// Se Owner vuole inviare un file di cui non è proprietario lancio un'eccezione
+		// Se Owner vuole condividere un file di cui non è proprietario lancio un'eccezione
 		if (check!=null && !check.getOwner().equals(Owner))
 			throw new IllegalSharingException();
 		
 		if (check==null)
 			throw new NoDataException();
 		else {
-			
-			// Se il file era già stato condiviso da Owner ad Other, lo rimuovo temporaneamente, per poi
-			// riaggiungerlo aggiornato, con il nuovo permesso d'accesso
-			if(this.searchFor(Other,file, Owner) != null)
-				data.get(Other).remove(check);
 					
 			// Il metodo setShareR è un metodo pubblico fornito da File<E>, in poche parole fa in modo che il file check si "ricordi" di essere stato condiviso in lettura
 			// all'utente Other (andare al metodo in questione per i commenti specifici sul suo funzionamento)
 			check.setShareR(Other);
 			
-			// Aggiungo all'ArrayList<File<E>> proprio di Other, il file check
-			data.get(Other).add(check);
+			// Aggiungo all'ArrayList<File<E>> proprio di Other, il file check, SOLO SE non era già presente.
+			// Nel caso fosse già presente mi basta aggiornare i permessi, cosa che ho fatto col comando precedente
+			if(this.searchFor(Other,file, Owner) == null)
+				data.get(Other).add(check);
 		}
 	}
 	/*
@@ -330,6 +328,7 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		if (this.getSize(Owner, passw)==0)
 			throw new NoDataException();
 		
+		// Se Owner vuole condividere un file a se stesso
 		if (Other.equals(Owner))
 			throw new IllegalSharingException();
 		
@@ -338,7 +337,7 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 		// Il metodo searchFor è un metodo privato, proprio di questa classe. (scendere al metodo in questione per i commenti sul suo funzionamento)
 		File<E> check = this.searchFor(Owner, file, null);
 		
-		// Se Owner vuole inviare un file di cui non è proprietario lancio un'eccezione
+		// Se Owner vuole condividere un file di cui non è proprietario lancio un'eccezione
 		if (check!=null && !check.getOwner().equals(Owner))
 			throw new IllegalSharingException();
 		
@@ -346,17 +345,14 @@ public class SecureFileContainer_Impl1<E> implements SecureFileContainer<E> {
 			throw new NoDataException();
 		else {
 			
-			// Se il file era già stato condiviso da Owner ad Other, lo rimuovo temporaneamente, per poi
-			// riaggiungerlo aggiornato, con il nuovo permesso d'accesso
-			if(this.searchFor(Other,file, Owner) != null)
-				data.get(Other).remove(check);
-			
 			// Il metodo setShareW è un metodo pubblico fornito da File<E>, in poche parole fa in modo che il file check si "ricordi" di essere stato condiviso in lettura e scrittura
 			// all'utente Other (andare al metodo in questione per i commenti specifici sul suo funzionamento)
 			check.setShareW(Other);
 			
-			// Aggiungo all'ArrayList<File<E>> proprio di Other, il file check
-			data.get(Other).add(check);
+			// Aggiungo all'ArrayList<File<E>> proprio di Other, il file check, SOLO SE non era già presente.
+			// Nel caso fosse già presente mi basta aggiornare i permessi, cosa che ho fatto col comando precedente
+			if(this.searchFor(Other,file, Owner) == null)
+				data.get(Other).add(check);
 		}
 		
 	}
